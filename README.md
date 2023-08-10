@@ -19,29 +19,10 @@ The limits are hard coded. They are:
 The layout colors are fixed like "dark mode" and can't be changed.
 The collection ID color is generated randomly at collection creation and can have one of the following colors:
 
-<div style="height: 1rem; width: 100%; background-color: #C66750"></div>
-
-```
-#C66750
-```
-
-<div style="height: 1rem; width: 100%; background-color: #5CA758"></div>
-
-```
-#5CA758
-```
-
-<div style="height: 1rem; width: 100%; background-color: #B2B059"></div>
-
-```
-#B2B059
-```
-
-<div style="height: 1rem; width: 100%; background-color: #5D80B5"></div>
-
-```
-#5D80B5
-```
+![#C66750](https://placehold.co/15x15/C66750/C66750.png) `#C66750`
+![#5CA758](https://placehold.co/15x15/5CA758/5CA758.png) `#5CA758`
+![#B2B059](https://placehold.co/15x15/B2B059/C66750.png) `#B2B059`
+![#5D80B5](https://placehold.co/15x15/5D80B5/5D80B5.png) `#5D80B5`
 
 *You can use this project to improve it or to develop your OPEN SOURCE project. No commercialization allowed*
 
