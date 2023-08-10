@@ -1,0 +1,14 @@
+{
+    "manifest_version": 3,
+    "name": "Tabgether",
+    "description": "Open your browser tabs with one click",
+    "version": "1.0.0",
+    "author": "Jonathan Hermam",
+    "action": {
+        "default_title": "Tabgether",
+        "default_popup": "pages/index.html"
+    },
+    "permissions": [
+        "storage"
+    ]
+}

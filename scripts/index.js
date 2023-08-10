@@ -1,0 +1,44 @@
+window.onload = () => {
+    getCollections();
+    chrome.storage.onChanged.addListener(() => {
+        getCollections();
+    });
+}
+
+function getCollections () {
+    chrome.storage.local.get(["collections"]).then((result) => {
+        let output = `<span>No collections found</span>`;
+        if (result.collections && result.collections.length > 0) {
+            output = "";
+            for (let item of result.collections) {
+                output += `
+                    <div class="border" id="tab-collection-${item.id}">
+                        <div class="tabs-collection" title="Open ${item.name.toLowerCase()} collection">
+                            <div class="collection-info">
+                                <div class="collection-id" style="background-color: ${item.color};">${item.id}</div>
+                                <span class="collection-name">${item.name}</span>
+                            </div>
+                            <div class="collection-details">
+                                <span>${item.urls.length}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } 
+        }
+        document.querySelector(".container").innerHTML = output;
+        if (result.collections && result.collections.length > 0) {
+            for (let item of result.collections) {
+                document.getElementById(`tab-collection-${item.id}`).addEventListener("click", (event) => {
+                    if (item.urls.length > 0) {
+                        for (let url of item.urls) {
+                            chrome.tabs.create({ url: url.string, active: false });
+                        }
+                    } else {
+                        alert("No tabs to open. Add tabs to this collection in the app settings");
+                    }
+                });
+            }
+        }
+    });
+}
