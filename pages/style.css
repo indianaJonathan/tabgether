@@ -33,6 +33,7 @@ a {
 .header, .header-reverse {
     align-items: center;
     display: flex;
+    gap: 2rem;
     justify-content: space-between;
     margin-top: 1rem;
     padding: 0rem 1rem;
@@ -203,7 +204,7 @@ input {
     outline: none;
     padding: .3rem;
     width: 100%;
-    max-width: 200px;
+    max-width: 14rem;
 }
 
 .input-add input {
@@ -225,6 +226,15 @@ input {
     flex-direction: column;
     justify-content: flex-start;
     margin-top: 5rem;
+}
+
+.add-collection-form {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    justify-content: space-between;
+    width: 100%;
 }
 
 @keyframes bounce-sides {

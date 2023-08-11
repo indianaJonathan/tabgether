@@ -1,3 +1,6 @@
+const MAX_URLS = 5;
+const MAX_COLLECTIONS = 7;
+
 window.onload = () => {
     getCollections();
     chrome.storage.onChanged.addListener(() => {
@@ -9,7 +12,7 @@ window.onload = () => {
             const currentCollections = await chrome.storage.local.get(["collections"]);
             const cols = currentCollections.collections || [];
             const newRow = { "id": cols && cols.length > 0 ? cols.length + 1 : 1, "name": value, "urls": [], color: getRandomColor()};
-            if (cols && cols.length < 5) cols.push(newRow);
+            if (cols && cols.length < MAX_COLLECTIONS) cols.push(newRow);
             chrome.storage.local.set({ "collections": cols } );
             document.getElementById("txt-area-add").value = "";
         }
@@ -26,6 +29,11 @@ function getCollections () {
     chrome.storage.local.get(["collections"]).then((result) => {
         let output = `<span>No collections found</span>`;
         if (result.collections && result.collections.length > 0) {
+            if (result.collections.length < MAX_COLLECTIONS) {
+                document.getElementById("add-collection").style.display = "flex";
+            } else {
+                document.getElementById("add-collection").style.display = "none";
+            }
             output = "";
             for (let item of result.collections) {
                 output += `
@@ -35,7 +43,7 @@ function getCollections () {
                                 <div class="collection-id" style="background-color: ${item.color};">${item.id}</div>
                                 <span class="collection-name">${maxString(item.name, "title")}</span>
                             </div>
-                            <button id="collection-delete-${item.id}" type="button" class="delete">
+                            <button id="collection-delete-${item.id}" type="button" class="delete" title="Delete ${item.name} collection">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 448 512" class="danger-icon"><path d="M32 464a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128H32zm272-256a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zM432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16z"/></svg>
                             </button>
                         </div>
@@ -50,7 +58,7 @@ function getCollections () {
         if (result.collections && result.collections.length > 0) {
             const collections = result.collections;
             for (let item of collections) {
-                if (item.urls.length < 3) {
+                if (item.urls.length < MAX_URLS) {
                     document.getElementById(`include-url-${item.id}`).addEventListener("submit", (event) => {
                         handleAddUrlSubmit(item, collections);
                     });
@@ -80,13 +88,13 @@ function getUrls (item) {
             output += `
                 <div class="included-url" id="included-url-${url.id}" title="${url.string}">
                     <span class="url-string">${maxString(url.string, "url")}</span>
-                    <button class="delete" type="button" id="delete-url-button-${url.id}">
+                    <button class="delete" type="button" id="delete-url-button-${url.id}" title="Remove ${url.string} tab from ${item.name} collection">
                         <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 448 512" class="danger-icon"><path d="M32 464a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128H32zm272-256a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zM432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16z"/></svg>
                     </button>
                 </div>
             `;
         }
-        if (item.urls.length >= 3) {
+        if (item.urls.length >= MAX_URLS) {
             canAdd = false;
         }
     }
