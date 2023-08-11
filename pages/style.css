@@ -56,6 +56,14 @@ a {
     padding: 1rem;
 }
 
+.border:hover {
+    background-color: #303030;
+}
+
+.border:hover input {
+    background-color: #404040;
+}
+
 .settings {
     align-items: center;
     cursor: pointer;
@@ -109,10 +117,6 @@ a {
     flex-direction: row;
     gap: 1rem;
     justify-content: space-between;
-}
-
-.border:hover {
-    transform: scale(1.03);
 }
 
 .collection-info {
@@ -180,7 +184,7 @@ a {
 }
 
 .url-string {
-    max-width: 100%;
+    max-width: 15rem;
     overflow: hidden;
 }
 
@@ -200,6 +204,11 @@ input {
     padding: .3rem;
     width: 100%;
     max-width: 200px;
+}
+
+.input-add input {
+    width: 100%;
+    max-width: 14rem;
 }
 
 .add-button {

@@ -33,7 +33,7 @@ function getCollections () {
                         <div class="tabs-collection" title="${item.name} collection">
                             <div class="collection-info">
                                 <div class="collection-id" style="background-color: ${item.color};">${item.id}</div>
-                                <span class="collection-name">${item.name}</span>
+                                <span class="collection-name">${maxString(item.name, "title")}</span>
                             </div>
                             <button id="collection-delete-${item.id}" type="button" class="delete">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 448 512" class="danger-icon"><path d="M32 464a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128H32zm272-256a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zM432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16z"/></svg>
@@ -78,8 +78,8 @@ function getUrls (item) {
     if (item.urls && item.urls.length > 0) {
         for (let url of item.urls) {
             output += `
-                <div class="included-url" id="included-url-${url.id}">
-                    <span class="url-string">${url.string}</span>
+                <div class="included-url" id="included-url-${url.id}" title="${url.string}">
+                    <span class="url-string">${maxString(url.string, "url")}</span>
                     <button class="delete" type="button" id="delete-url-button-${url.id}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 448 512" class="danger-icon"><path d="M32 464a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128H32zm272-256a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zM432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16z"/></svg>
                     </button>
@@ -92,7 +92,7 @@ function getUrls (item) {
     }
     if (canAdd == true) output += `
                             <div class="input-add">
-                                <input type="text" id="txt-area-url-${item.id}"/>
+                                <input type="text" id="txt-area-url-${item.id}" placeholder="Type the new url"/>
                                 <button id="add-url-button-${item.id}" class="add-button" type="submit">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 448 512" class="icon"><path d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"/></svg>
                                 </button>
@@ -111,5 +111,18 @@ function handleAddUrlSubmit (item, collections) {
                 chrome.storage.local.set({ "collections": collections });
             }
         }
+    }
+}
+
+function maxString (value, type) {
+    switch (type) {
+        case "url":
+            if (value.length > 38) return value.substring(0, 35) + "...";
+            return value;
+        case "title":
+            if (value.length > 17) return value.substring(0, 14) + "...";
+            return value;
+        default:
+            return value;
     }
 }
