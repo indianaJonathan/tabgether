@@ -12,8 +12,8 @@ It saves the collections details using the Chrome Storage API (local)
 
 ### What about the limits?
 The limits are hard coded. They are:
-- 3 tabs per collection
-- 5 collections per Chrome profile
+- 5 tabs per collection
+- 7 collections per Chrome profile
 
 ### What about the colors?
 The layout colors are fixed like "dark mode" and can't be changed.
