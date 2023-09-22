@@ -89,10 +89,12 @@ a {
     animation: bounce-sides 350ms ease-in-out infinite;
 }
 
-.delete {
+.delete, .edit, .save, .cancel {
     background: none;
     border: none;
+    color: #EEEEEE;
     cursor: pointer;
+    flex: 1;
 }
 
 .page-title {
@@ -167,6 +169,10 @@ a {
     fill: #FF0000;
 }
 
+.edit-icon {
+    fill: #EEEEEE;
+}
+
 .form {
     display: flex;
     flex-direction: column;
@@ -189,6 +195,12 @@ a {
     overflow: hidden;
 }
 
+.url-options {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+
 .input-add {
     align-items: center;
     display: flex;
@@ -197,7 +209,7 @@ a {
     justify-content: space-between;
 }
 
-input {
+input, .input-edit {
     background: #303030;
     border: none;
     font-size: 1.3rem;
@@ -210,6 +222,10 @@ input {
 .input-add input {
     width: 100%;
     max-width: 14rem;
+}
+
+.input-edit {
+    font-size: .8rem;
 }
 
 .add-button {
