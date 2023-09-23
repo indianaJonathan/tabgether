@@ -195,7 +195,7 @@ a {
     overflow: hidden;
 }
 
-.url-options {
+.url-options, .collection-options {
     display: flex;
     flex-direction: row;
     gap: 1rem;
@@ -226,6 +226,12 @@ input, .input-edit {
 
 .input-edit {
     font-size: .8rem;
+}
+
+.input-collection-edit {
+    font-size: 1.3rem;
+    max-width: 8rem;
+    width: 100%;
 }
 
 .add-button {
