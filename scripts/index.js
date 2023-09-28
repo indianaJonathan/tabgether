@@ -29,10 +29,14 @@ function getCollections () {
         document.querySelector(".container").innerHTML = output;
         if (result.collections && result.collections.length > 0) {
             for (let item of result.collections) {
-                document.getElementById(`tab-collection-${item.id}`).addEventListener("click", (event) => {
+                document.getElementById(`tab-collection-${item.id}`).addEventListener("click", async (event) => {
                     if (item.urls.length > 0) {
+                        const current_tab = await chrome.tabs.query({ currentWindow: true, active: true });
                         for (let url of item.urls) {
-                            chrome.tabs.create({ url: url.string, active: false });
+                            chrome.tabs.create({ url: url.string, active: item.urls.indexOf(url) == 0 });
+                        }
+                        if (current_tab[0].url == "chrome://newtab/") {
+                            chrome.tabs.remove(current_tab[0].id);
                         }
                     } else {
                         alert("No tabs to open. Add tabs to this collection in the app settings");
