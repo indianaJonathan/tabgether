@@ -126,17 +126,18 @@ a {
     align-items: center;
     display: flex;
     flex-direction: row;
-    gap: 1rem;
+    gap: .5rem;
     justify-content: flex-start;
     width: 100%;
 }
 
-.collection-id {
+.collection-id, .collection-move-options {
     align-items: center;
     border-radius: 1rem;
     display: flex;
     flex-direction: row;
     font-size: 2rem;
+    gap: .5rem;
     height: 4rem;
     justify-content: center;
     width: 4rem;
@@ -171,6 +172,14 @@ a {
 
 .edit-icon {
     fill: #EEEEEE;
+}
+
+.option-icon {
+    fill: #7d9bcf;
+}
+
+.option-disabled-icon {
+    fill: #AAAAAA;
 }
 
 .form {
@@ -257,6 +266,21 @@ input, .input-edit {
     gap: 1rem;
     justify-content: space-between;
     width: 100%;
+}
+
+.url-edit-options {
+    background-color: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    gap: .5rem;
+}
+
+.url-edit-arrow, .collection-edit-arrow {
+    background-color: rgba(0,0,0,0);
+    border: none;
+    cursor: pointer;
 }
 
 @keyframes bounce-sides {

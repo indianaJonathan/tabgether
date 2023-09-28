@@ -149,10 +149,25 @@ function getDefaultCollectionHeader (collection, collections) {
 }
 
 function getEditCollectionHeader (collection, collections) {
+    isFirst = false;
+    isLast = false;
+    if (collections.indexOf(collection) == 0) {
+        isFirst = true;
+    }
+    if (collections.indexOf(collection) == (collections.length - 1)) {
+        isLast = true;
+    }
     url_element = document.getElementById(`collection-header-${collection.id}`);
     url_element.innerHTML = `
         <div class="collection-info">
-            <div class="collection-id" style="background-color: ${collection.color};">${collection.id}</div>
+            <div class="collection-move-options">
+                <button id="collection-move-down-${collection.id}" type="button" class="collection-edit-arrow" ${isLast ? 'disabled' : ''}>
+                    <svg xmlns="http://www.w3.org/2000/svg" height="15" width="15" viewBox="0 0 448 512" class="option${isLast ? '-disabled' : ''}-icon"><path d="M413.1 222.5l22.2 22.2c9.4 9.4 9.4 24.6 0 33.9L241 473c-9.4 9.4-24.6 9.4-33.9 0L12.7 278.6c-9.4-9.4-9.4-24.6 0-33.9l22.2-22.2c9.5-9.5 25-9.3 34.3.4L184 343.4V56c0-13.3 10.7-24 24-24h32c13.3 0 24 10.7 24 24v287.4l114.8-120.5c9.3-9.8 24.8-10 34.3-.4z"/></svg>
+                </button>
+                <button id="collection-move-up-${collection.id}" type="button" class="collection-edit-arrow" ${isFirst ? 'disabled' : ''}>
+                    <svg xmlns="http://www.w3.org/2000/svg" height="15" width="15" viewBox="0 0 448 512" class="option${isFirst ? '-disabled' : ''}-icon"><path d="M34.9 289.5l-22.2-22.2c-9.4-9.4-9.4-24.6 0-33.9L207 39c9.4-9.4 24.6-9.4 33.9 0l194.3 194.3c9.4 9.4 9.4 24.6 0 33.9L413 289.4c-9.5 9.5-25 9.3-34.3-.4L264 168.6V456c0 13.3-10.7 24-24 24h-32c-13.3 0-24-10.7-24-24V168.6L69.2 289.1c-9.3 9.8-24.8 10-34.3.4z"/></svg>
+                </button>
+            </div>
             <input class="input-collection-edit" type="text" value="${collection.name}" id="input-collection-edit-${collection.id}" />
         </div>
         <div class="collection-options">
@@ -196,6 +211,26 @@ function setCollectionActions (collection, collections) {
             chrome.storage.local.set({ "collections": collections });
         });
     }
+    move_up_collection_button = document.getElementById(`collection-move-up-${collection.id}`)
+    if (move_up_collection_button) {
+        move_up_collection_button.addEventListener("click", (event) => {
+            current_index = collections.indexOf(collection);
+            element_before = collections[current_index - 1]
+            collections[current_index - 1] = collection
+            collections[current_index] = element_before
+            chrome.storage.local.set({ "collections": collections });
+        });
+    }
+    move_down_collection_button = document.getElementById(`collection-move-down-${collection.id}`)
+    if (move_down_collection_button) {
+        move_down_collection_button.addEventListener("click", (event) => {
+            current_index = collections.indexOf(collection);
+            element_after = collections[current_index + 1]
+            collections[current_index + 1] = collection
+            collections[current_index] = element_after
+            chrome.storage.local.set({ "collections": collections });
+        });
+    }
 }
 
 function getDefaultUrlElement (url, item, collections) {
@@ -217,9 +252,23 @@ function getDefaultUrlElement (url, item, collections) {
 }
 
 function getEditUrlElement (url, item, collections) {
+    isFirst = false;
+    isLast = false;
+    if (item.urls.indexOf(url) == 0) {
+        isFirst = true
+    }
+    if (item.urls.indexOf(url) == (item.urls.length - 1)) {
+        isLast = true
+    }
     url_element = document.getElementById(`included-url-${url.id}`);
     url_element.innerHTML = `
-        <div>
+        <div class="url-edit-options">
+            <button id="url-down-option-${url.id}" type="button" class="url-edit-arrow" ${isLast ? 'disabled' : ''}>
+                <svg xmlns="http://www.w3.org/2000/svg" height="12" width="12" viewBox="0 0 448 512" class="option${isLast ? '-disabled' : ''}-icon"><path d="M413.1 222.5l22.2 22.2c9.4 9.4 9.4 24.6 0 33.9L241 473c-9.4 9.4-24.6 9.4-33.9 0L12.7 278.6c-9.4-9.4-9.4-24.6 0-33.9l22.2-22.2c9.5-9.5 25-9.3 34.3.4L184 343.4V56c0-13.3 10.7-24 24-24h32c13.3 0 24 10.7 24 24v287.4l114.8-120.5c9.3-9.8 24.8-10 34.3-.4z"/></svg>
+            </button>
+            <button id="url-up-option-${url.id}" type="button" class="url-edit-arrow" ${isFirst ? 'disabled' : ''}>
+                <svg xmlns="http://www.w3.org/2000/svg" height="12" width="12" viewBox="0 0 448 512" class="option${isFirst ? '-disabled' : ''}-icon"><path d="M34.9 289.5l-22.2-22.2c-9.4-9.4-9.4-24.6 0-33.9L207 39c9.4-9.4 24.6-9.4 33.9 0l194.3 194.3c9.4 9.4 9.4 24.6 0 33.9L413 289.4c-9.5 9.5-25 9.3-34.3-.4L264 168.6V456c0 13.3-10.7 24-24 24h-32c-13.3 0-24-10.7-24-24V168.6L69.2 289.1c-9.3 9.8-24.8 10-34.3.4z"/></svg>
+            </button>
             <input class="input-edit" type="text" value="${url.string}" id="input-url-edit-${url.id}" />
         </div>
         <div class="url-options">
@@ -260,6 +309,27 @@ function setUrlButtonsActions (url, item, collections) {
     if (cancel_button) {
         document.getElementById(`cancel-url-button-${url.id}`).addEventListener("click", (event) => {
             getDefaultUrlElement(url, item, collections);
+            chrome.storage.local.set({ "collections": collections });
+        });
+    }
+    move_up_button = document.getElementById(`url-up-option-${url.id}`);
+    if (move_up_button) {
+        move_up_button.addEventListener("click", (event) => {
+            current_index = item.urls.indexOf(url);
+            element_before = item.urls[current_index - 1]
+            item.urls[current_index - 1] = url
+            item.urls[current_index] = element_before
+            chrome.storage.local.set({ "collections": collections });
+        });
+    }
+    move_down_button = document.getElementById(`url-down-option-${url.id}`);
+    if (move_down_button) {
+        move_down_button.addEventListener("click", (event) => {
+            current_index = item.urls.indexOf(url);
+            element_after = item.urls[current_index + 1]
+            item.urls[current_index + 1] = url
+            item.urls[current_index] = element_after
+            collections[collections.indexOf(item)] = item
             chrome.storage.local.set({ "collections": collections });
         });
     }
