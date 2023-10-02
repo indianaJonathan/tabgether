@@ -73,7 +73,7 @@ function getUrls (item) {
     if (item.urls && item.urls.length > 0) {
         for (let url of item.urls) {
             output += `
-                <div class="included-url" id="included-url-${url.id}" title="${url.string}">
+                <div class="included-url" id="included-url-${url.id}" title="${url.string}" draggable="${true}">
                     <div>
                         <span class="url-string">${maxString(url.string, "url")}</span>
                     </div>
@@ -109,7 +109,7 @@ function handleAddUrlSubmit (item, collections) {
         if (col.id == item.id) {
             if (value && value !== "") {
                 const urls = col.urls;
-                urls.push({"id": `${item.id}-${item.urls.length}`, "string": value.startsWith("http") ? value : `https://${value}`});
+                urls.push({ "id": `${item.id}-${item.urls.length}`, "string": value.startsWith("http") ? value : `https://${value}` });
                 chrome.storage.local.set({ "collections": collections });
             }
         }
@@ -284,6 +284,46 @@ function getEditUrlElement (url, item, collections) {
 }
 
 function setUrlButtonsActions (url, item, collections) {
+    url_element = document.getElementById(`included-url-${url.id}`);
+    if (url_element) {
+        url_element.addEventListener("dragstart", (event) => {
+            selected_url = event.target.id;
+            event
+                .dataTransfer
+                .setData('text/plain', event.target.id);
+
+            event
+                .currentTarget
+                .style
+                .border = "1px dashed #909090";
+            event
+                .currentTarget
+                .style
+                .borderRadius = "1rem";
+        });
+        url_element.addEventListener("dragover", (event) => {
+            event.preventDefault();
+        });
+        url_element.addEventListener("drop", (event) => {
+            const id = event
+                .dataTransfer
+                .getData('text');
+            const selected_element_id = document.getElementById(id).id;
+            const dropzone = event.target;
+            event
+                .dataTransfer
+                .clearData();
+            target_element_id = dropzone.parentElement.parentElement.id;
+            target_element = item.urls.find((it) => target_element_id === `included-url-${it.id}`);
+            target_element_index = item.urls.indexOf(target_element);
+            selected_element = item.urls.find((it) => selected_element_id === `included-url-${it.id}`);
+            selected_element_index = item.urls.indexOf(selected_element);
+            
+            item.urls.splice(selected_element_index, 1);
+            item.urls.splice(target_element_index < selected_element_index ? target_element_index - 1 : target_element_index, 0, selected_element);
+            chrome.storage.local.set({ "collections": collections });
+        });
+    }
     delete_button = document.getElementById(`delete-url-button-${url.id}`);
     if (delete_button) {
         delete_button.addEventListener("click", (event) => {
