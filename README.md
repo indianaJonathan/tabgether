@@ -33,13 +33,13 @@ The collection ID color is generated randomly at collection creation and can hav
 - Edit URL
 - Delete URL
 - Change collection URLs indexes (drag and drop and edit mode)
+- Export collections (JSON file)
+- Import collections (JSON file)
 
 ### What will be implemented?
 - Change collections order
 - Change collection color
 - Add a light theme
-- Add the "export" function to collections
-- Add the "import" function to collections
 
 *You can use this project to improve it or to develop your OPEN SOURCE project. No commercialization allowed*
 

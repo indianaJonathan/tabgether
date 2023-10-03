@@ -13,13 +13,13 @@ function getCollections () {
             for (let item of result.collections) {
                 output += `
                     <div class="border" id="tab-collection-${item.id}">
-                        <div class="tabs-collection" title="Open ${item.name.toLowerCase()} collection">
+                        <div class="tabs-collection" title="Open ${item?.name?.toLowerCase()} collection">
                             <div class="collection-info">
                                 <div class="collection-id" style="background-color: ${item.color};">${item.id}</div>
                                 <span class="collection-name">${maxString(item.name, "title")}</span>
                             </div>
                             <div class="collection-details">
-                                <span>${item.urls.length}</span>
+                                <span>${item?.urls?.length}</span>
                             </div>
                         </div>
                     </div>
@@ -53,7 +53,7 @@ function maxString (value, type) {
             if (value.length > 38) return value.substring(0, 35) + "...";
             return value;
         case "title":
-            if (value.length > 17) return value.substring(0, 14) + "...";
+            if (value?.length > 17) return value?.substring(0, 14) + "...";
             return value;
         default:
             return value;

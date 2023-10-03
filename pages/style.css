@@ -65,7 +65,7 @@ a {
     background-color: #404040;
 }
 
-.settings {
+.settings, .export-icon, .import-icon {
     align-items: center;
     cursor: pointer;
     display: flex;
@@ -75,6 +75,21 @@ a {
 
 .settings:hover {
     transform: rotate(180deg);
+}
+
+.export-icon:hover {
+    transform: translateY(-3px);
+}
+.import-icon:hover {
+    transform: translateY(3px);
+}
+
+.header-options {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    justify-content: center;
 }
 
 .back {
@@ -243,12 +258,24 @@ input, .input-edit {
     width: 100%;
 }
 
-.add-button {
+.add-button, .export-button, .import-button {
     background-color: #4845d1;
     border: none;
     border-radius: .5rem;
     cursor: pointer;
     padding: .5rem .7rem;
+}
+
+.export-button-disabled, .import-button-disabled {
+    background-color: #7271b9;
+    border: none;
+    border-radius: .5rem;
+    cursor: not-allowed;
+    padding: .5rem .7rem;
+}
+
+.export-button, .export-button-disabled, .import-button, .import-button-disabled {
+    width: 100%;
 }
 
 .content {
@@ -281,6 +308,37 @@ input, .input-edit {
     background-color: rgba(0,0,0,0);
     border: none;
     cursor: pointer;
+}
+
+.form-buttons, .import-buttons {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.regular-text {
+    font-size: 1.1rem;
+}
+
+.export-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.input-file {
+    align-items: center;
+    border: 1px dashed #303030;
+    border-radius: 1rem;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    justify-content: center;
+    padding: 2rem;
 }
 
 @keyframes bounce-sides {
