@@ -6,7 +6,11 @@
     "author": "Jonathan Hermam",
     "action": {
         "default_title": "Tabgether",
-        "default_popup": "pages/index.html"
+        "default_popup": "pages/index.html",
+        "default_icon": {
+            "16": "images/icon-16.png",
+            "128": "images/icon-128.png"
+          }
     },
     "permissions": [
         "storage",
