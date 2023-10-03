@@ -24,6 +24,23 @@ The collection ID color is generated randomly at collection creation and can hav
 ![#B2B059](https://placehold.co/15x15/B2B059/C66750.png) `#B2B059`
 ![#5D80B5](https://placehold.co/15x15/5D80B5/5D80B5.png) `#5D80B5`
 
+### Which features are already implemented?
+- Create collection
+- Add a URL to a collection
+- Open tab collection
+- Edit collection name
+- Delete collection
+- Edit URL
+- Delete URL
+- Change collection URLs indexes
+
+### What will be implemented?
+- Change collections order
+- Change collection color
+- Add a light theme
+- Add the "export" function to collections
+- Add the "import" function to collections
+
 *You can use this project to improve it or to develop your OPEN SOURCE project. No commercialization allowed*
 
 > *Project created by Jonathan Hermam*
