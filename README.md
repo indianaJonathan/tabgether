@@ -32,7 +32,7 @@ The collection ID color is generated randomly at collection creation and can hav
 - Delete collection
 - Edit URL
 - Delete URL
-- Change collection URLs indexes
+- Change collection URLs indexes (drag and drop and edit mode)
 
 ### What will be implemented?
 - Change collections order
