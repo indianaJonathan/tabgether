@@ -35,7 +35,7 @@ function getCollections () {
                         for (let url of item.urls) {
                             chrome.tabs.create({ url: url.string, active: item.urls.indexOf(url) == 0 });
                         }
-                        if (current_tab[0].url == "chrome://newtab/") {
+                        if (current_tab[0].url == "chrome://newtab/" || !current_tab[0].url) {
                             chrome.tabs.remove(current_tab[0].id);
                         }
                     } else {
