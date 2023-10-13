@@ -1,3 +1,5 @@
+var theme = "";
+
 window.onload = () => {
     getCollections();
     chrome.storage.onChanged.addListener(() => {
@@ -6,19 +8,47 @@ window.onload = () => {
 }
 
 function getCollections () {
-    chrome.storage.local.get(["collections"]).then((result) => {
+    chrome.storage.local.get(["collections", "theme"]).then((result) => {
+        pageMain = document.getElementById("index-page");
+        listClasses = pageMain.classList;
+        import_icon = document.getElementById("import-icon");
+        export_icon = document.getElementById("export-icon");
+        settings_icon = document.getElementById("settings-icon");
+        icons = [import_icon, export_icon, settings_icon];
+        if (result.theme && result.theme == "dark") {
+            if (listClasses.value == "full-page-light") {
+                pageMain.classList.remove("full-page-light");
+            }
+            pageMain.classList.add("full-page-dark");
+            for (icon of icons) {
+                icon.classList.value = "icon-dark"
+            }
+        } else if (result.theme && result.theme == "light") {
+            if (listClasses.value == "full-page-dark") {
+                pageMain.classList.remove("full-page-dark");
+            }
+            pageMain.classList.add("full-page-light");
+            for (icon of icons) {
+                icon.classList.value = "icon-light"
+            }
+        } else {
+            pageMain.classList.add("full-page-dark");
+            for (icon of icons) {
+                icon.classList.value = "icon-dark"
+            }
+        }
         let output = `<span>No collections found</span>`;
         if (result.collections && result.collections.length > 0) {
             output = "";
             for (let item of result.collections) {
                 output += `
-                    <div class="border" id="tab-collection-${item.id}">
+                    <div class="border-${result.theme}" id="tab-collection-${item.id}">
                         <div class="tabs-collection" title="Open ${item?.name?.toLowerCase()} collection">
                             <div class="collection-info">
                                 <div class="collection-id" style="background-color: ${item.color};">${item.id}</div>
                                 <span class="collection-name">${maxString(item.name, "title")}</span>
                             </div>
-                            <div class="collection-details">
+                            <div class="collection-details-${result.theme}">
                                 <span>${item?.urls?.length}</span>
                             </div>
                         </div>
@@ -26,7 +56,8 @@ function getCollections () {
                 `;
             } 
         }
-        document.querySelector(".container").innerHTML = output;
+        document.getElementById("container").innerHTML = output;
+        document.getElementById("container").classList.value = `container-${result.theme}`
         if (result.collections && result.collections.length > 0) {
             for (let item of result.collections) {
                 document.getElementById(`tab-collection-${item.id}`).addEventListener("click", async (event) => {

@@ -77,7 +77,16 @@ function getActions () {
 }
 
 function getCollections () {
-    chrome.storage.local.get(["collections"]).then((result) => {
+    chrome.storage.local.get(["collections", "theme"]).then((result) => {
+        pageMain = document.getElementById("import-page");
+        pageMain.classList.value = `full-page-${result.theme}`
+        container = document.getElementById("container")
+        container.classList.value = `container-${result.theme}`
+        back_icon = document.getElementById("back-icon")
+        icons = [back_icon]
+        for (icon of icons) {
+            icon.classList.value = `icon-${result.theme}`
+        }
         element = document.getElementById("collections-size");
         if (result.collections && result.collections.length > 0) {
             element.innerHTML = `Current collections: ${result.collections.length}`

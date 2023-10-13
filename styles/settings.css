@@ -1,0 +1,151 @@
+/* Header */
+.header {
+    align-items: center;
+    display: flex;
+    gap: 2rem;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 1rem;
+    padding: 0rem 1rem;
+    position: absolute;
+        top: 0;
+        left: 0;
+    width: 90%;
+}
+/* ------------------------------------------ */
+
+/* Form icons */
+.cancel, .delete, .edit, .save {
+    background: none;
+    border: none;
+    color: #EEEEEE;
+    cursor: pointer;
+    flex: 1;
+}
+/* ------------------------------------------ */
+
+/* Main form */
+.add-button {
+    background-color: #4845d1;
+    border: none;
+    border-radius: .5rem;
+    color: #FFFFFF;
+    cursor: pointer;
+    padding: .5rem .7rem;
+}
+
+.add-collection-form {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.collection-edit-arrow, .url-edit-arrow {
+    background-color: rgba(0,0,0,0);
+    border: none;
+    cursor: pointer;
+}
+
+.collection-options, .url-options {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    justify-content: flex-start;
+    padding: 1rem 0;
+}
+
+.form-buttons {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.included-url {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.input-add {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    justify-content: space-between;
+}
+
+.input-add input {
+    width: 100%;
+    max-width: 14rem;
+}
+
+.input-collection-edit {
+    font-size: 1.3rem;
+    max-width: 8rem;
+    width: 100%;
+}
+
+.input-dark, .input-edit, .input-light {
+    border: none;
+    font-size: 1.3rem;
+    outline: none;
+    padding: .3rem;
+    width: 100%;
+    max-width: 14rem;
+}
+
+.input-dark {
+    background: #303030;
+    color: #BBBBBB;
+}
+
+.input-edit {
+    font-size: .8rem;
+}
+
+.input-light {
+    background: #BBBBBB;
+    color: #303030;
+}
+
+.url-string {
+    max-width: 15rem;
+    overflow: hidden;
+}
+/* ------------------------------------------ */
+
+/* URL edit */
+.url-edit-options {
+    background-color: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    gap: .5rem;
+}
+/* ------------------------------------------ */
+
+/* Buttons */
+.toggle-mode {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    padding: 1rem;
+    width: 90%;
+}
+/* ------------------------------------------ */

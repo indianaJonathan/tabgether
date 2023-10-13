@@ -8,15 +8,23 @@ window.onload = () => {
 }
 
 function getCollections () {
-    chrome.storage.local.get(["collections"]).then((result) => {
-        container = document.getElementById("container");
+    chrome.storage.local.get(["collections", "theme"]).then((result) => {
+        pageMain = document.getElementById("export-page");
+        pageMain.classList.value = `full-page-${result.theme}`
+        container = document.getElementById("container")
+        container.classList.value = `container-${result.theme}`
+        back_icon = document.getElementById("back-icon")
+        icons = [back_icon]
+        for (icon of icons) {
+            icon.classList.value = `icon-${result.theme}`
+        }
         container.innerHTML = `<span>No collections found</span>`;
         if (result.collections && result.collections.length > 0) {
             container.innerHTML = `
                 <form id="export-collections-form" class="export-form">
                 </form>
             `;
-            getCollectionsElements(result.collections);
+            getCollectionsElements(result.collections, result.theme);
             form = document.getElementById("export-collections-form")
             form.addEventListener("submit", (event) => {
                 event.preventDefault();
@@ -26,12 +34,12 @@ function getCollections () {
     });
 }
 
-function getCollectionsElements (collections) {
+function getCollectionsElements (collections, theme) {
     exportForm = document.getElementById("export-collections-form");
     output = "";
     for (let collection of collections) {
         output += `
-            <div class="border" id="collection-select-${collection.id}" title="Select ${collection.name} collection">
+            <div class="border-${theme}" id="collection-select-${collection.id}" title="Select ${collection.name} collection">
                 <div class="tabs-collection" id="collection-export-${collection.id}">
                     <input type="checkbox" id="checkbox-${collection.id}" name="checkbox-${collection.id}" hidden/>
                     <span class="collection-name">${collection.name}</span>
@@ -42,10 +50,10 @@ function getCollectionsElements (collections) {
     output += `<div class="form-buttons" id="form-buttons"></div>`
     exportForm.innerHTML = output;
     getFormButtons();
-    setActions(collections);
+    setActions(collections, theme);
 }
 
-function setActions (collections) {
+function setActions (collections, theme) {
     for (let collection of collections) {
         element = document.getElementById(`collection-select-${collection.id}`);
         element.addEventListener("click", (event) => {
@@ -57,12 +65,12 @@ function setActions (collections) {
         checkbox.addEventListener("click", (event) => {
             collectionDiv = document.getElementById(`collection-select-${collection.id}`);
             if (checkbox.checked) {
-                collectionDiv.style.backgroundColor = "#303030";
+                collectionDiv.classList.value = `border-${theme} selected-${theme}`;
                 collectionDiv.title = `Deselect ${collection.name} collection`;
                 collections_to_export.push(collection);
                 collections_to_export.sort(function (a, b) { return a.id - b.id });
             } else {
-                collectionDiv.style.backgroundColor = null;
+                collectionDiv.classList.value = `border-${theme}`;
                 collectionDiv.title = `Select ${collection.name} collection`;
                 collections_to_export.splice(collections_to_export.indexOf(collection), 1);
             }

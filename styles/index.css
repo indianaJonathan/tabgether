@@ -1,0 +1,36 @@
+/* Header */
+.header {
+    align-items: center;
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 2rem;
+    justify-content: space-between;
+    margin-top: 1rem;
+    padding: 0rem 1rem;
+    position: absolute;
+        top: 0;
+        left: 0;
+    width: 90%;
+}
+/* ------------------------------------------ */
+
+/* Header icons */
+.settings, .export-icon, .import-icon {
+    align-items: center;
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.settings:hover {
+    transform: rotate(180deg);
+}
+
+.export-icon:hover {
+    transform: translateY(-3px);
+}
+.import-icon:hover {
+    transform: translateY(3px);
+}
+/* ------------------------------------------ */

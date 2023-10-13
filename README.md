@@ -16,7 +16,7 @@ The limits are hard coded. They are:
 - 7 collections per Chrome profile
 
 ### What about the colors?
-The layout colors are fixed like "dark mode" and can't be changed.
+The layout colors can be toggled between light and dark mode in the settings page.
 The collection ID color is generated randomly at collection creation and can have one of the following colors:
 
 ![#C66750](https://placehold.co/15x15/C66750/C66750.png) `#C66750`
@@ -32,14 +32,14 @@ The collection ID color is generated randomly at collection creation and can hav
 - Delete collection
 - Edit URL
 - Delete URL
+- Change collections indexes (edit mode)
 - Change collection URLs indexes (drag and drop and edit mode)
 - Export collections (JSON file)
 - Import collections (JSON file)
+- Light theme
 
 ### What will be implemented?
-- Change collections order
 - Change collection color
-- Add a light theme
 
 *You can use this project to improve it or to develop your OPEN SOURCE project. No commercialization allowed*
 
