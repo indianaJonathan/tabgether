@@ -37,9 +37,7 @@ The collection ID color is generated randomly at collection creation and can hav
 - Export collections (JSON file)
 - Import collections (JSON file)
 - Light theme
-
-### What will be implemented?
-- Change collection color
+- Collection color change
 
 *You can use this project to improve it or to develop your OPEN SOURCE project. No commercialization allowed*
 

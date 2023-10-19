@@ -216,6 +216,7 @@ function getEditCollectionHeader (collection, collections, theme) {
                     <svg xmlns="http://www.w3.org/2000/svg" height="15" width="15" viewBox="0 0 448 512" class="option${isFirst ? '-disabled' : ''}-icon"><path d="M34.9 289.5l-22.2-22.2c-9.4-9.4-9.4-24.6 0-33.9L207 39c9.4-9.4 24.6-9.4 33.9 0l194.3 194.3c9.4 9.4 9.4 24.6 0 33.9L413 289.4c-9.5 9.5-25 9.3-34.3-.4L264 168.6V456c0 13.3-10.7 24-24 24h-32c-13.3 0-24-10.7-24-24V168.6L69.2 289.1c-9.3 9.8-24.8 10-34.3.4z"/></svg>
                 </button>
             </div>
+            <input class="color-picker" type="color" value="${collection.color}" id="input-collection-edit-color-${collection.id}"/>
             <input class="input-collection-edit input-${theme}" type="text" value="${collection.name}" id="input-collection-edit-${collection.id}"/>
         </div>
         <div class="collection-options">
@@ -248,6 +249,7 @@ function setCollectionActions (collection, collections, theme) {
     if (save_collection_button) {
         save_collection_button.addEventListener("click", (event) => {
             collection.name = document.getElementById(`input-collection-edit-${collection.id}`).value;
+            collection.color = document.getElementById(`input-collection-edit-color-${collection.id}`).value;
             getDefaultCollectionHeader(collection, collections, theme);
             chrome.storage.local.set({ "collections": collections });
         });
