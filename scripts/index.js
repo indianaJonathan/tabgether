@@ -40,7 +40,7 @@ function getCollections () {
                     <div class="border-${result.theme}" id="tab-collection-${item.id}">
                         <div class="tabs-collection" title="Open ${item?.name?.toLowerCase()} collection">
                             <div class="collection-info">
-                                <div class="collection-id" style="background-color: ${item.color};">${item.id}</div>
+                                <div class="collection-id" style="background-color: ${item.color};"></div>
                                 <span class="collection-name">${maxString(item.name, "title")}</span>
                             </div>
                             <div class="collection-details-${result.theme}">
