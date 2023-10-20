@@ -16,18 +16,12 @@ function getCollections () {
         settings_icon = document.getElementById("settings-icon");
         icons = [import_icon, export_icon, settings_icon];
         if (result.theme && result.theme == "dark") {
-            if (listClasses.value == "full-page-light") {
-                pageMain.classList.remove("full-page-light");
-            }
-            pageMain.classList.add("full-page-dark");
+            pageMain.classList.value = "full-page-dark";
             for (icon of icons) {
                 icon.classList.value = "icon-dark"
             }
         } else if (result.theme && result.theme == "light") {
-            if (listClasses.value == "full-page-dark") {
-                pageMain.classList.remove("full-page-dark");
-            }
-            pageMain.classList.add("full-page-light");
+            pageMain.classList.value = "full-page-light";
             for (icon of icons) {
                 icon.classList.value = "icon-light"
             }
@@ -36,6 +30,7 @@ function getCollections () {
             for (icon of icons) {
                 icon.classList.value = "icon-dark"
             }
+            chrome.storage.local.set({ "theme": "dark" });
         }
         let output = `<span>No collections found</span>`;
         if (result.collections && result.collections.length > 0) {
