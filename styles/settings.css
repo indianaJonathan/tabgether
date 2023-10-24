@@ -100,9 +100,33 @@
     max-width: 14rem;
 }
 
+.input-color {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-color: transparent;
+    border: none;
+    border-radius: .3rem;
+    cursor: pointer;
+    height: 2.1rem;
+    margin: 0;
+    padding: 0;
+    width: 2.5rem;
+}
+
+.input-color::-webkit-color-swatch {
+    border: none;
+    border-radius: .3rem;
+}
+
+.input-color::-moz-color-swatch {
+    border: none;
+    border-radius: .3rem;
+}
+
 .input-collection-edit {
     font-size: 1.3rem;
-    max-width: 8rem;
+    max-width: 7rem;
     width: 100%;
 }
 
@@ -112,7 +136,6 @@
     outline: none;
     padding: .3rem;
     width: 100%;
-    max-width: 14rem;
 }
 
 .input-dark {
@@ -126,7 +149,7 @@
 
 .input-light {
     background: #BBBBBB;
-    color: #303030;
+    color: #202020;
 }
 
 .url-string {

@@ -5,11 +5,7 @@
     margin: 0;
     padding: 0;
     user-select: none;
-    transition: all 350ms ease-in-out;
-}
-
-span {
-    transition: color 1ms ease-in-out;
+    transition: all 350ms ease-in-out, color 1ms ease-in-out, fill 1ms ease-in-out;
 }
 
 body {
@@ -46,7 +42,7 @@ a {
 
 .border-dark, .border-light {
     border-radius: 1rem;
-    padding: 1rem;
+    padding: .5rem;
 }
 
 .border-dark {
@@ -65,11 +61,11 @@ a {
     background-color: #AAAAAA;
 }
 
-.border-dark:hover input {
+.border-dark:hover .input-dark {
     background-color: #404040;
 }
 
-.border-light:hover input {
+.border-light:hover .input-light {
     background-color: #999999;
 }
 
@@ -105,7 +101,7 @@ a {
     gap: 0.5rem;
     justify-content: flex-start;
     min-width: 300px;
-    padding: 1rem;
+    padding: .3rem;
 }
 
 .container-dark {
@@ -136,14 +132,14 @@ a {
 
 .collection-id, .collection-move-options {
     align-items: center;
-    border-radius: 1rem;
+    border-radius: .3rem;
     display: flex;
     flex-direction: row;
     font-size: 2rem;
     gap: .5rem;
-    height: 4rem;
     justify-content: center;
-    width: 4rem;
+    min-height: 2rem;
+    width: 3rem;
 }
 
 .collection-name {
