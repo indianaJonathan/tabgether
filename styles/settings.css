@@ -106,7 +106,7 @@
     appearance: none;
     background-color: transparent;
     border: none;
-    border-radius: .3rem;
+    border-radius: 3rem;
     cursor: pointer;
     height: 2.1rem;
     margin: 0;
@@ -114,14 +114,9 @@
     width: 2.5rem;
 }
 
-.input-color::-webkit-color-swatch {
+.input-color::-webkit-color-swatch, .input-color::-moz-color-swatch {
     border: none;
-    border-radius: .3rem;
-}
-
-.input-color::-moz-color-swatch {
-    border: none;
-    border-radius: .3rem;
+    border-radius: 3rem;
 }
 
 .input-collection-edit {
@@ -176,5 +171,24 @@
     justify-content: flex-end;
     padding: 1rem;
     width: 90%;
+}
+
+.new-collection {
+    margin: 3rem;
+}
+
+.add-new-collection {
+    background-color: #4845d1;
+    border: none;
+    border-radius: 1rem;
+    color: #DDDDDD;
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding: .5rem .7rem;
+    text-align: center;
+}
+
+.add-new-collection:hover {
+    background-color: #333196;
 }
 /* ------------------------------------------ */

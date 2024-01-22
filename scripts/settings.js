@@ -6,24 +6,6 @@ window.onload = () => {
     chrome.storage.onChanged.addListener(() => {
         getCollections();
     });
-    document.getElementById('add-button').addEventListener("click", async (event) => {
-        add_input = document.getElementById("txt-area-add");
-        const value = add_input.value;
-        if (value && value !== "") {
-            const currentCollections = await chrome.storage.local.get(["collections"]);
-            const cols = currentCollections.collections || [];
-            const newRow = { "id": cols && cols.length > 0 ? cols.length + 1 : 1, "name": value, "urls": [], color: getRandomColor()};
-            if (cols && cols.length < MAX_COLLECTIONS) cols.push(newRow);
-            chrome.storage.local.set({ "collections": cols } );
-            add_input.value = "";
-        }
-    });
-}
-
-function getRandomColor () {
-    const colors = ["#C66750", "#5CA758", "#B2B059", "#5D80B5"];
-    var color = colors[Math.floor(Math.random()*colors.length)];
-    return color;
 }
 
 function getCollections () {
@@ -31,8 +13,6 @@ function getCollections () {
         pageMain = document.getElementById("settings-page");
         listClasses = pageMain.classList;
         mode_button = document.getElementById("dark_light_mode_button");
-        add_input = document.getElementById("txt-area-add");
-        add_input.classList.value = `input-${result.theme}`;
         back_icon = document.getElementById("back-icon")
         icons = [back_icon]
         for (icon of icons) {
@@ -149,19 +129,6 @@ function getUrls (item, theme) {
                             </div>
                         `;
     return output;
-}
-
-function handleAddUrlSubmit (item, collections) {
-    const value = document.getElementById(`txt-area-url-${item.id}`).value;
-    for (let col of collections) {
-        if (col.id == item.id) {
-            if (value && value !== "") {
-                const urls = col.urls;
-                urls.push({ "id": `${item.id}-${item.urls.length}`, "string": value.startsWith("http") ? value : `https://${value}` });
-                chrome.storage.local.set({ "collections": collections });
-            }
-        }
-    }
 }
 
 function maxString (value, type) {
