@@ -11,9 +11,11 @@ This is a simple chrome extension created to open a collection of tabs with 1 cl
 It saves the collections details using the Chrome Storage API (local)
 
 ### What about the limits?
-The limits are hard coded. They are:
-- 5 tabs per collection
-- 7 collections per Chrome profile
+~~The limits are hard coded. They are:~~
+- ~~5 tabs per collection~~
+- ~~7 collections per Chrome profile~~
+
+***limits removed***
 
 ### What about the colors?
 The layout colors can be toggled between light and dark mode in the settings page.
