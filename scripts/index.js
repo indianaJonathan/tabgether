@@ -34,40 +34,50 @@ function getCollections () {
         }
         let output = `<span>No collections found</span>`;
         if (result.collections && result.collections.length > 0) {
+            console.log("collections", result.collections);
             output = "";
             for (let item of result.collections) {
-                output += `
-                    <div class="border-${result.theme}" id="tab-collection-${item.id}">
-                        <div class="tabs-collection" title="Open ${item?.name?.toLowerCase()} collection">
-                            <div class="collection-info">
-                                <div class="collection-id" style="background-color: ${item.color};"></div>
-                                <span class="collection-name">${maxString(item.name, "title")}</span>
-                            </div>
-                            <div class="collection-details-${result.theme}">
-                                <span>${item?.urls?.length}</span>
+                if (item) {
+                    output += `
+                        <div class="border-${result.theme}" id="tab-collection-${item.id}">
+                            <div class="tabs-collection" title="Open ${item?.name?.toLowerCase()} collection">
+                                <div class="collection-info">
+                                    <div class="collection-id" style="background-color: ${item.color};"></div>
+                                    <span class="collection-name">${maxString(item.name, "title")}</span>
+                                </div>
+                                <div class="collection-details-${result.theme}">
+                                    <span>${item?.urls?.length}</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                `;
+                    `;
+                } else {
+                    const collections = result.collections;
+                    const index = collections.indexOf(item);
+                    collections.splice(index, 1);
+                    chrome.storage.local.set({ "collections": collections });
+                }
             } 
         }
         document.getElementById("container").innerHTML = output;
         document.getElementById("container").classList.value = `container-${result.theme}`
         if (result.collections && result.collections.length > 0) {
             for (let item of result.collections) {
-                document.getElementById(`tab-collection-${item.id}`).addEventListener("click", async (event) => {
-                    if (item.urls.length > 0) {
-                        const current_tab = await chrome.tabs.query({ currentWindow: true, active: true });
-                        for (let url of item.urls) {
-                            chrome.tabs.create({ url: url.string, active: item.urls.indexOf(url) == 0 });
+                if (item) {
+                    document.getElementById(`tab-collection-${item.id}`).addEventListener("click", async (event) => {
+                        if (item.urls.length > 0) {
+                            const current_tab = await chrome.tabs.query({ currentWindow: true, active: true });
+                            for (let url of item.urls) {
+                                chrome.tabs.create({ url: url.string, active: item.urls.indexOf(url) == 0 });
+                            }
+                            if (current_tab[0].url == "chrome://newtab/" || !current_tab[0].url) {
+                                chrome.tabs.remove(current_tab[0].id);
+                            }
+                        } else {
+                            alert("No tabs to open. Add tabs to this collection in the app settings");
                         }
-                        if (current_tab[0].url == "chrome://newtab/" || !current_tab[0].url) {
-                            chrome.tabs.remove(current_tab[0].id);
-                        }
-                    } else {
-                        alert("No tabs to open. Add tabs to this collection in the app settings");
-                    }
-                });
+                    });
+                }
             }
         }
     });

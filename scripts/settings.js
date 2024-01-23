@@ -55,15 +55,17 @@ function getCollections () {
         if (result.collections && result.collections.length > 0) {
             output = "";
             for (let item of result.collections) {
-                output += `
-                    <div class="border-${result.theme}">
-                        <div class="tabs-collection" title="${item.name} collection" id="collection-header-${item.id}">
+                if (item) {
+                    output += `
+                        <div class="border-${result.theme}">
+                            <div class="tabs-collection" title="${item.name} collection" id="collection-header-${item.id}">
+                            </div>
+                            <form action="" class="form" id="include-url-${item.id}">
+                                ${getUrls(item, result.theme)}
+                            </form>
                         </div>
-                        <form action="" class="form" id="include-url-${item.id}">
-                            ${getUrls(item, result.theme)}
-                        </form>
-                    </div>
-                `;
+                    `;
+                }
             } 
         }
         document.getElementById("container").innerHTML = output;
@@ -71,10 +73,12 @@ function getCollections () {
         if (result.collections && result.collections.length > 0) {
             const collections = result.collections;
             for (let item of collections) {
-                getDefaultCollectionHeader(item, collections, result.theme);
-                if (item.urls.length > 0) {
-                    for (let url of item.urls) {
-                        getDefaultUrlElement(url, item, collections, result.theme);
+                if (item) {
+                    getDefaultCollectionHeader(item, collections, result.theme);
+                    if (item.urls.length > 0) {
+                        for (let url of item.urls) {
+                            getDefaultUrlElement(url, item, collections, result.theme);
+                        }
                     }
                 }
             }
@@ -131,10 +135,16 @@ function getDefaultCollectionHeader (collection, collections, theme) {
                 <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 128 512" class="icon-${theme}"><path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z"/></svg>
             </button>
             <div style="display: none; position: absolute; background-color: #404040; padding: .2rem; flex-direction: column; gap: .3rem; align-items: flex-start;" id="col-op-${collection.id}">
-                <button id="collection-edit-${collection.id}" class="default-button">
+                <button id="collection-edit-${collection.id}" class="default-button" title="Edit collection">
                     <span>Edit</span>
                 </button>
-                <button id="collection-delete-${collection.id}" class="default-button">
+                <button id="collection-move-up-${collection.id}" class="default-button" title="Move collection up">
+                    <span>Move up</span>
+                </button>
+                <button id="collection-move-down-${collection.id}" class="default-button" title="Move collection down">
+                    <span>Move down</span>
+                </button>
+                <button id="collection-delete-${collection.id}" class="default-button" title="Delete collection">
                     <span>Delete</span>
                 </button>
             </div>
@@ -156,6 +166,30 @@ function setCollectionActions (collection, collections, theme) {
         edit_collection_button.addEventListener("click", () => {
             window.location.assign(`edit.html?collection=${collection.id}`);
         });
+    }
+    move_up_collection_button = document.getElementById(`collection-move-up-${collection.id}`)
+    if (move_up_collection_button) {
+        move_up_collection_button.addEventListener("click", () => {
+            const currentIndex = collections.indexOf(collection);
+            if (currentIndex > 0) {
+                const prevCollection = collections[currentIndex - 1]
+                collections[currentIndex - 1] = collection
+                collections[currentIndex] = prevCollection
+                chrome.storage.local.set({ "collections": collections });
+            }
+        })
+    }
+    move_down_collection_button = document.getElementById(`collection-move-down-${collection.id}`)
+    if (move_down_collection_button) {
+        move_down_collection_button.addEventListener("click", () => {
+            const currentIndex = collections.indexOf(collection);
+            if (currentIndex < collections.length - 1) {
+                const nextCollection = collections[currentIndex + 1]
+                collections[currentIndex + 1] = collection
+                collections[currentIndex] = nextCollection
+                chrome.storage.local.set({ "collections": collections });
+            }
+        })
     }
     options_collection_button = document.getElementById(`collection-options-${collection.id}`)
     if (options_collection_button) {
