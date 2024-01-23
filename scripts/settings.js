@@ -1,6 +1,3 @@
-const MAX_URLS = 5;
-const MAX_COLLECTIONS = 7;
-
 window.onload = () => {
     getCollections();
     chrome.storage.onChanged.addListener(() => {
@@ -56,11 +53,6 @@ function getCollections () {
         }
         let output = `<span>No collections found</span>`;
         if (result.collections && result.collections.length > 0) {
-            if (result.collections.length < MAX_COLLECTIONS) {
-                document.getElementById("add-collection").style.display = "flex";
-            } else {
-                document.getElementById("add-collection").style.display = "none";
-            }
             output = "";
             for (let item of result.collections) {
                 output += `
@@ -80,11 +72,6 @@ function getCollections () {
             const collections = result.collections;
             for (let item of collections) {
                 getDefaultCollectionHeader(item, collections, result.theme);
-                if (item.urls.length < MAX_URLS) {
-                    document.getElementById(`include-url-${item.id}`).addEventListener("submit", (event) => {
-                        handleAddUrlSubmit(item, collections);
-                    });
-                }
                 if (item.urls.length > 0) {
                     for (let url of item.urls) {
                         getDefaultUrlElement(url, item, collections, result.theme);
@@ -115,9 +102,6 @@ function getUrls (item, theme) {
                     </div>
                 </div>
             `;
-        }
-        if (item.urls.length >= MAX_URLS) {
-            canAdd = false;
         }
     }
     return output;
@@ -259,15 +243,15 @@ function setUrlButtonsActions (url, item, collections, theme) {
             chrome.storage.local.set({ "collections": collections });
         });
     }
-    edit_button = document.getElementById(`delete-url-button-${url.id}`);
+    edit_button = document.getElementById(`edit-url-button-${url.id}`);
     if (edit_button) {
-        document.getElementById(`edit-url-button-${url.id}`).addEventListener("click", (event) => {
+        edit_button.addEventListener("click", (event) => {
             getEditUrlElement(url, item, collections, theme);
         });
     }
     save_button = document.getElementById(`save-url-button-${url.id}`);
     if (save_button) {
-        document.getElementById(`save-url-button-${url.id}`).addEventListener("click", (event) => {
+        save_button.addEventListener("click", (event) => {
             url.string = document.getElementById(`input-url-edit-${url.id}`).value;
             getDefaultUrlElement(url, item, collections, theme);
             chrome.storage.local.set({ "collections": collections });
@@ -275,7 +259,7 @@ function setUrlButtonsActions (url, item, collections, theme) {
     }
     cancel_button = document.getElementById(`cancel-url-button-${url.id}`);
     if (cancel_button) {
-        document.getElementById(`cancel-url-button-${url.id}`).addEventListener("click", (event) => {
+        cancel_button.addEventListener("click", (event) => {
             getDefaultUrlElement(url, item, collections, theme);
             chrome.storage.local.set({ "collections": collections });
         });
