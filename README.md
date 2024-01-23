@@ -34,8 +34,8 @@ The collection ID color is generated randomly at collection creation and can hav
 - Delete collection
 - Edit URL
 - Delete URL
-- Change collections indexes (edit mode)
-- Change collection URLs indexes (drag and drop and edit mode)
+- ~~Change collections indexes (edit mode)~~ ***feature removed***
+- ~~Change collection URLs indexes (drag and drop and edit mode)~~ ***feature removed***
 - Export collections (JSON file)
 - Import collections (JSON file)
 - Light theme
