@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Tabgether</title>
+        <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/edit.css">
+        <script src="../scripts/edit.js"></script>
+    </head>
+    <body>
+        <main id="edit-page">
+            <div class="header">
+                <a href="settings.html">
+                    <div class="back" title="Return to settings page">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 320 512" id="back-icon"><path d="M34.52 239.03L228.87 44.69c9.37-9.37 24.57-9.37 33.94 0l22.67 22.67c9.36 9.36 9.37 24.52.04 33.9L131.49 256l154.02 154.75c9.34 9.38 9.32 24.54-.04 33.9l-22.67 22.67c-9.37 9.37-24.57 9.37-33.94 0L34.52 272.97c-9.37-9.37-9.37-24.57 0-33.94z"/></svg>
+                    </div>
+                </a>
+            </div>
+            <div class="content">
+                <span class="page-title">Edit collection</span>
+                <div id="container">
+                    <form id="edit-collection-form" class="form">
+                    <div class="form-row">
+                        <span>Color: </span>
+                        <input type="color" id="collection-color-input" class="input-color"/>
+                    </div>
+                    <input type="text" id="collection-name-input" placeholder="Name"/>
+                    <div id="urls-area" class="urls-area">
+                        <div id="included-urls" class="urls-display"></div>
+                        <div class="form-row" id="add-url-form">
+                            <input type="text" placeholder="Type URL here" id="new-url"/>
+                            <button type="button" id="add-url-button" class="button">
+                                <span>
+                                    <svg class="icon-dark" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="form-buttons">
+                        <button type="submit" id="save-button" class="button" title="Save collection">
+                        <span style="padding: 0 5rem;">
+                            <svg id="save-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 448 512"><path d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V173.3c0-17-6.7-33.3-18.7-45.3L352 50.7C340 38.7 323.7 32 306.7 32H64zm0 96c0-17.7 14.3-32 32-32H288c17.7 0 32 14.3 32 32v64c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V128zM224 288a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"/></svg>
+                        </span>
+                        </button>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </body>
+</html>
