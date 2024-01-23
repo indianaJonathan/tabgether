@@ -1,4 +1,4 @@
-var collection = {id: "", name: "", color: "", urls: []}
+var add_collection = {id: "", name: "", color: "", urls: []}
 var urls = []
 
 window.onload = () => {
@@ -61,18 +61,28 @@ function loadListeners () {
       } else {
         const currentCollections = await chrome.storage.local.get(["collections"]);
         const cols = currentCollections.collections || [];
-        collection.id = cols.length + 1;
-        collection.name = nameInput.value;
-        collection.color = document.getElementById("collection-color-input").value;
+        var available = false;
+        newId = 0
+        while (!available) {
+          const collec = cols.find((c) => c.id.toString() == newId.toString())
+          if (!collec) {
+            available = true;
+          } else {
+            newId += 1;
+          }
+        }
+        add_collection.id = `${newId}`;
+        add_collection.name = nameInput.value;
+        add_collection.color = document.getElementById("collection-color-input").value;
         fixedUrls = [];
         for (let url of urls) {
           newUrl = {string: "", id: ""}
           newUrl.string = url.string;
-          newUrl.id = `${collection.id}-${fixedUrls.length + 1}`
+          newUrl.id = `${newId}-${fixedUrls.length + 1}`
           fixedUrls.push(newUrl);
         }
-        collection.urls = fixedUrls;
-        cols.push(collection);
+        add_collection.urls = fixedUrls;
+        cols.push(add_collection);
         chrome.storage.local.set({ "collections": cols } );
         navigation.back();
       }

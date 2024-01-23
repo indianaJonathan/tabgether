@@ -1,4 +1,4 @@
-var collection = {id: "", name: "", color: "", urls: []}
+var edit_collection = {id: "", name: "", color: "", urls: []}
 var urls = []
 
 window.onload = () => {
@@ -28,12 +28,12 @@ function loadData () {
 
     chrome.storage.local.get(["collections"]).then((result) => {
         const collectionId = window.location.search.split("=")[1];
-        const col = result.collections.find((col) => col.id = collectionId);
+        const col = result.collections.find((col) => col.id == collectionId);
         if (col) {
-            collection = col;
-            collectionColorInput.value = collection.color;
-            collectionNameInput.value = collection.name;
-            urls = collection.urls;
+          edit_collection = col;
+          collectionColorInput.value = col.color;
+          collectionNameInput.value = col.name;
+          urls = col.urls;
             loadUrls();
         } else {
             alert(`Could not find collection ${collectionId}`);
@@ -74,11 +74,11 @@ function loadListeners () {
       } else {
         const currentCollections = await chrome.storage.local.get(["collections"]);
         const cols = currentCollections.collections || [];
-        collection.name = nameInput.value;
-        collection.color = document.getElementById("collection-color-input").value;
-        collection.urls = urls;
-        const index = cols.findIndex((col) => col.id = collection.id);
-        cols[index] = collection;
+        edit_collection.name = nameInput.value;
+        edit_collection.color = document.getElementById("collection-color-input").value;
+        edit_collection.urls = urls;
+        const index = cols.findIndex((col) => col.id == edit_collection.id);
+        cols[index] = edit_collection;
         chrome.storage.local.set({ "collections": cols } );
         navigation.back();
       }

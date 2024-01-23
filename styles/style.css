@@ -192,6 +192,25 @@ a {
 .default-button {
     background: none;
     border: none;
+    color: #FFFFFF;
+    cursor: pointer;
+    padding: .3rem .5rem;
+    text-align: left;
+    width: 100%;
+}
+
+.default-button:hover {
+    background: rgba(0,0,0,0.3);
+}
+
+.default-button span {
+    text-align: left;
+    width: 100%;
+}
+
+.default-icon-button {
+    background-color: rgba(0,0,0,0);
+    border: none;
     cursor: pointer;
 }
 

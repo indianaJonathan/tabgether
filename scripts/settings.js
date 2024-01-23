@@ -84,7 +84,6 @@ function getCollections () {
 
 function getUrls (item, theme) {
     let output = "";
-    let canAdd = true;
     if (item.urls && item.urls.length > 0) {
         for (let url of item.urls) {
             output += `
@@ -128,12 +127,17 @@ function getDefaultCollectionHeader (collection, collections, theme) {
             <span class="collection-name">${maxString(collection.name, "title")}</span>
         </div>
         <div class="collection-options">
-            <button id="collection-options-${collection.id}" type="button" class="edit" title="Edit ${collection.name} collection">
-                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 512 512" class="icon-${theme}"><path d="M362.7 19.3L314.3 67.7 444.3 197.7l48.4-48.4c25-25 25-65.5 0-90.5L453.3 19.3c-25-25-65.5-25-90.5 0zm-71 71L58.6 323.5c-10.4 10.4-18 23.3-22.2 37.4L1 481.2C-1.5 489.7 .8 498.8 7 505s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L421.7 220.3 291.7 90.3z"/></svg>
+            <button id="collection-options-${collection.id}" type="button" class="edit" title="Collection options">
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 128 512" class="icon-${theme}"><path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z"/></svg>
             </button>
-            <button id="collection-delete-${collection.id}" type="button" class="delete" title="Delete ${collection.name} collection">
-                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 448 512" class="danger-icon"><path d="M32 464a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128H32zm272-256a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zM432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16z"/></svg>
-            </button>
+            <div style="display: none; position: absolute; background-color: #404040; padding: .2rem; flex-direction: column; gap: .3rem; align-items: flex-start;" id="col-op-${collection.id}">
+                <button id="collection-edit-${collection.id}" class="default-button">
+                    <span>Edit</span>
+                </button>
+                <button id="collection-delete-${collection.id}" class="default-button">
+                    <span>Delete</span>
+                </button>
+            </div>
         </div>
     `
     setCollectionActions(collection, collections, theme);
@@ -147,12 +151,30 @@ function setCollectionActions (collection, collections, theme) {
             chrome.storage.local.set({ "collections": collections });
         });
     }
-    options_collection_button = document.getElementById(`collection-options-${collection.id}`)
-    if (options_collection_button) {
-        options_collection_button.addEventListener("click", () => {
+    edit_collection_button = document.getElementById(`collection-edit-${collection.id}`)
+    if (edit_collection_button) {
+        edit_collection_button.addEventListener("click", () => {
             window.location.assign(`edit.html?collection=${collection.id}`);
         });
     }
+    options_collection_button = document.getElementById(`collection-options-${collection.id}`)
+    if (options_collection_button) {
+        options_collection_button.addEventListener("click", () => {
+            menu = document.getElementById(`col-op-${collection.id}`)
+            menu.style.display = "flex"
+        })
+    }
+
+    document.addEventListener("click", (event) => {
+        menu = document.getElementById(`col-op-${collection.id}`)
+        if (menu) {
+            if (event.target.id === `col-op-${collection.id}` || event.target.parentElement.id == `collection-options-${collection.id}`) {
+                menu.style.display = "flex"
+            } else {
+                menu.style.display = "none"
+            }
+        }
+    })
 }
 
 function getDefaultUrlElement (url, item, collections, theme) {
