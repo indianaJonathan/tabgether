@@ -109,7 +109,7 @@ function loadUrls () {
 
 function addUrl () {
   newUrlInput = document.getElementById("new-url");
-  urls.push({ string: newUrlInput.value, id: `${collection.id}-${urls.length + 1}` })
+  urls.push({ string: newUrlInput.value, id: `${edit_collection.id}-${urls.length + 1}` })
   newUrlInput.value = ""
   loadUrls();
 }
