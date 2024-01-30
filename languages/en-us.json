@@ -3,7 +3,8 @@
     "settings": "Settings",
     "your_collections": "Your collections",
     "export_collections": "Export collections",
-    "import_collections": "Import collections"
+    "import_collections": "Import collections",
+    "edit_collection": "Edit collection"
   },
   "buttons": { 
     "titles": {
@@ -14,6 +15,15 @@
       "add_collection": "Add collection",
       "save": "Save",
       "back": "Back",
+      "add_url": "Add URL",
+      "delete_url": "Delete URL from collection",
+      "edit_url": "Edit URL",
+      "delete_collection": "Delete collection",
+      "edit_collection": "Edit collection",
+      "move_collection_up": "Move collection up",
+      "move_collection_down": "Move collection down",
+      "move_url_up": "Move URL up",
+      "move_url_down": "Move URL down",
       "settings": "Settings",
       "import": "Import",
       "export": "Export"
@@ -34,7 +44,8 @@
       "import_from_file": "Import collections from file"
     },
     "span": {
-      "no_collections_found": "No collection found"
+      "no_collections_found": "No collection found",
+      "color": "Color"
     },
     "captions": {
       "select_file": "Select file",
@@ -47,6 +58,9 @@
       "incorret_type": "Incorrect file format",
       "no_file": "Cannot import collections without a file",
       "no_collection_selected": "Cannot export without select any collection"
+    },
+    "placeholders": {
+      "type_url": "Type URL here"
     }
   }
 }

@@ -1,9 +1,24 @@
 var edit_collection = {id: "", name: "", color: "", urls: []}
 var urls = []
+var lang;
 
 window.onload = () => {
-  loadData();
-  loadListeners();
+  getLocation();
+}
+
+function getLocation() {
+  chrome.storage.local.get(["language", "theme"]).then(async (result) => {
+      selectedLang = "en-us";
+      if (result.language) {
+          selectedLang = result.language;
+      } else {
+          chrome.storage.local.set({"language": "en-us"});
+      }
+      lang = await fetch(`../languages/${selectedLang}.json`)
+          .then((response) => response.json());
+        loadData();
+        loadListeners();
+  });
 }
 
 function loadData () {
@@ -11,22 +26,33 @@ function loadData () {
   chrome.storage.local.get(["theme"]).then((result) => {
     theme = result.theme;
     pageMain = document.getElementById("edit-page");
+    pageTitle = document.getElementById("page-title");
     collectionNameInput = document.getElementById("collection-name-input")
     collectionColorInput = document.getElementById("collection-color-input")
+    colorLabel = document.getElementById("collection-color-label")
     newUrlInput = document.getElementById("new-url")
     urlsArea = document.getElementById("urls-area")
     back_icon = document.getElementById("back-icon")
+    backButton = document.getElementById("back")
     save_icon = document.getElementById("save-icon")
+    saveButton = document.getElementById("save-button")
+    addUrlButton = document.getElementById("add-url-button")
     icons = [back_icon]
     for (icon of icons) {
         icon.classList.value = `icon-${theme}`
     }
     pageMain.classList.add(`full-page-${theme}`);
+    pageTitle.innerHTML = lang.titles.edit_collection;
     collectionNameInput.classList.add(`input-${theme}`)
     collectionColorInput.classList.add(`input-color-${theme}`)
+    colorLabel.innerHTML = `${lang.others.span.color}:`;
     urlsArea.classList.add(`border-${theme}`)
     newUrlInput.classList.add(`input-${theme}`)
+    newUrlInput.placeholder = lang.others.placeholders.type_url;
     save_icon.classList.add(`icon-dark`)
+    saveButton.title = lang.buttons.titles.save;
+    backButton.title = lang.buttons.titles.back;
+    addUrlButton = lang.buttons.titles.add_url;
   });
 
   chrome.storage.local.get(["collections"]).then((result) => {
@@ -39,7 +65,6 @@ function loadData () {
       urls = col.urls;
         loadUrls();
     } else {
-        alert(`Could not find collection ${collectionId}`);
         navigation.back();
     }
 });
@@ -106,21 +131,21 @@ function loadUrls () {
                 <span style="display: block; padding: .3rem 2rem .3rem .3rem; font-size: 1.3rem;" id="url-display-${url.id}">${maxString(url.string, "url")}</span>
                 <input style="display: none;" id="url-edit-input-${url.id}" type="text" value="${url.string}" class="input-${theme}"/>
                 <div class="url-buttons">
-                  <button class="icon-button" type="button" id="options-url-${url.id}" title="URL options">
+                  <button class="icon-button" type="button" id="options-url-${url.id}" title="${lang.buttons.titles.url_options}">
                     <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 128 512" class="icon-${theme}"><path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z"/></svg>
                   </button>
                   <div class="float-menu-hide" id="url-op-${url.id}">
-                      <button id="url-edit-${url.id}" type="button" class="default-button" title="Edit URL">
-                          <span>Edit</span>
+                      <button id="url-edit-${url.id}" type="button" class="default-button" title="${lang.buttons.titles.edit_url}">
+                          <span>${lang.buttons.captions.edit}</span>
                       </button>
-                      <button id="url-move-up-${url.id}" type="button" class="default-button" title="Move URL up">
-                          <span>Move up</span>
+                      <button id="url-move-up-${url.id}" type="button" class="default-button" title="${lang.buttons.titles.move_url_up}">
+                          <span>${lang.buttons.captions.move_up}</span>
                       </button>
-                      <button id="url-move-down-${url.id}" type="button" class="default-button" title="Move URL down">
-                          <span>Move down</span>
+                      <button id="url-move-down-${url.id}" type="button" class="default-button" title="${lang.buttons.titles.move_url_down}">
+                          <span>${lang.buttons.captions.move_down}</span>
                       </button>
-                      <button id="url-delete-${url.id}" type="button" class="default-button" title="Delete URL">
-                          <span>Delete</span>
+                      <button id="url-delete-${url.id}" type="button" class="default-button" title="${lang.buttons.titles.delete_url}">
+                          <span>${lang.buttons.captions.delete}</span>
                       </button>
                   </div>
                 </div>
