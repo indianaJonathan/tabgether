@@ -167,7 +167,7 @@
 .toggle-mode {
     display: flex;
     flex-direction: row;
-    justify-content: flex-end;
+    justify-content: space-between;
     padding: 1rem;
     width: 90%;
 }

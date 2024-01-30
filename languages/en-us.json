@@ -1,0 +1,39 @@
+{
+  "titles": {
+    "settings": "Settings",
+    "your_collections": "Your collections",
+    "export_collections": "Export collections",
+    "import_collections": "Import collections"
+  },
+  "buttons": { 
+    "titles": {
+      "toggle_mode_dark": "Toggle to dark mode",
+      "toggle_mode_light": "Toggle to light mode",
+      "collection_options": "Collection options",
+      "url_options": "URL options",
+      "add_collection": "Add collection",
+      "save": "Save",
+      "back": "Back"
+    },
+    "captions": { 
+      "edit": "Edit",
+      "move_up": "Move up",
+      "move_down": "Move down",
+      "delete": "Delete",
+      "import": "Import",
+      "export": "Export"
+    }
+  },
+  "others": {
+    "titles": { 
+      "drag_drop_url": "Drag and drop to change URL index"
+    },
+    "span": {
+      "no_collections_found": "No collection found"
+    },
+    "captions": {
+      "select_file": "Select file",
+      "current_collections": "Current collections:"
+    }
+  }
+}

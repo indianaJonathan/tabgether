@@ -1,0 +1,45 @@
+{
+  "titles": {
+    "settings": "Configurações",
+    "your_collections": "Suas coleções",
+    "export_collections": "Exportar coleções",
+    "import_collections": "Importar coleções"
+  },
+  "buttons": { 
+    "titles": {
+      "toggle_mode_dark": "Mudar para tema escuro",
+      "toggle_mode_light": "Mudar para tema claro",
+      "collection_options": "Opções da coleção",
+      "url_options": "Opções da URL",
+      "add_collection": "Adicionar coleção",
+      "save": "Salvar",
+      "back": "Voltar",
+      "delete_url": "Remover URL da coleção",
+      "edit_url": "Editar URL",
+      "delete_collection": "Excluir coleção",
+      "edit_collection": "Editar coleção",
+      "move_collection_up": "Mover coleção para cima",
+      "move_collection_down": "Mover coleção para baixo"
+    },
+    "captions": { 
+      "edit": "Editar",
+      "move_up": "Mover para cima",
+      "move_down": "Muver para baixo",
+      "delete": "Excluir",
+      "import": "Importar",
+      "export": "Exportar"
+    }
+  },
+  "others": {
+    "titles": { 
+      "drag_drop_url": "Arraste e solte para mudar a ordem da URL"
+    },
+    "span": {
+      "no_collections_found": "Nenhuma coleção encontrada"
+    },
+    "captions": {
+      "select_file": "Selecionar arquivo",
+      "current_collections": "Coleções atuais:"
+    }
+  }
+}

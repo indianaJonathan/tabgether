@@ -239,12 +239,18 @@ a {
     position: absolute;
 }
 
-.float-menu-dark {
+.input-select-dark, .input-select-light {
+    border: none;
+    font-size: 1.3rem;
+    padding: .3rem .5rem;
+}
+
+.float-menu-dark, .input-select-dark {
     background-color: #404040;
     color: #909090;
 }
 
-.float-menu-light {
+.float-menu-light, .input-select-light {
     background-color: #909090;
     color: #404040;
 }
