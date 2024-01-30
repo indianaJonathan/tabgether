@@ -7,7 +7,9 @@ window.onload = () => {
 }
 
 function loadData () {
+  let theme = "dark";
   chrome.storage.local.get(["theme"]).then((result) => {
+    theme = result.theme;
     pageMain = document.getElementById("edit-page");
     collectionNameInput = document.getElementById("collection-name-input")
     collectionColorInput = document.getElementById("collection-color-input")
@@ -17,30 +19,30 @@ function loadData () {
     save_icon = document.getElementById("save-icon")
     icons = [back_icon]
     for (icon of icons) {
-        icon.classList.value = `icon-${result.theme}`
+        icon.classList.value = `icon-${theme}`
     }
-    pageMain.classList.add(`full-page-${result.theme}`);
-    collectionNameInput.classList.add(`input-${result.theme}`)
-    collectionColorInput.classList.add(`input-color-${result.theme}`)
-    urlsArea.classList.add(`border-${result.theme}`)
-    newUrlInput.classList.add(`input-${result.theme}`)
+    pageMain.classList.add(`full-page-${theme}`);
+    collectionNameInput.classList.add(`input-${theme}`)
+    collectionColorInput.classList.add(`input-color-${theme}`)
+    urlsArea.classList.add(`border-${theme}`)
+    newUrlInput.classList.add(`input-${theme}`)
     save_icon.classList.add(`icon-dark`)
-
-    chrome.storage.local.get(["collections"]).then((result) => {
-        const collectionId = window.location.search.split("=")[1];
-        const col = result.collections.find((col) => col.id == collectionId);
-        if (col) {
-          edit_collection = col;
-          collectionColorInput.value = col.color;
-          collectionNameInput.value = col.name;
-          urls = col.urls;
-            loadUrls();
-        } else {
-            alert(`Could not find collection ${collectionId}`);
-            navigation.back();
-        }
-    });
   });
+
+  chrome.storage.local.get(["collections"]).then((result) => {
+    const collectionId = window.location.search.split("=")[1];
+    const col = result.collections.find((col) => col.id == collectionId);
+    if (col) {
+      edit_collection = col;
+      collectionColorInput.value = col.color;
+      collectionNameInput.value = col.name;
+      urls = col.urls;
+        loadUrls();
+    } else {
+        alert(`Could not find collection ${collectionId}`);
+        navigation.back();
+    }
+});
 }
 
 function loadListeners () {
@@ -78,6 +80,12 @@ function loadListeners () {
         edit_collection.color = document.getElementById("collection-color-input").value;
         edit_collection.urls = urls;
         const index = cols.findIndex((col) => col.id == edit_collection.id);
+        for (let url of urls) {
+          const updatedUrlInput = document.getElementById(`url-edit-input-${url.id}`)
+          if (url.string != updatedUrlInput.value && updatedUrlInput.value != "") {
+            url.string = updatedUrlInput.value;
+          }
+        }
         cols[index] = edit_collection;
         chrome.storage.local.set({ "collections": cols } );
         navigation.back();
@@ -87,22 +95,83 @@ function loadListeners () {
 }
 
 function loadUrls () {
+  let theme = "dark";
+  chrome.storage.local.get(["theme"]).then((result) => {
+    theme = result.theme;
+  });
   urlsArea = document.getElementById("included-urls");
   output = ""
   for (let url of urls) {
     output += `<div class="form-row">
-                <span>${maxString(url.string, "url")}</span>
-                <button class="icon-button" type="button" id="delete-url-${url.id}">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 448 512" class="danger-icon"><path d="M32 464a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128H32zm272-256a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zM432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16z"/></svg>
-                </button>
+                <span style="display: block; padding: .3rem 2rem .3rem .3rem; font-size: 1.3rem;" id="url-display-${url.id}">${maxString(url.string, "url")}</span>
+                <input style="display: none;" id="url-edit-input-${url.id}" type="text" value="${url.string}" class="input-${theme}"/>
+                <div class="url-buttons">
+                  <button class="icon-button" type="button" id="options-url-${url.id}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 128 512" class="icon-${theme}"><path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z"/></svg>
+                  </button>
+                  <div class="float-menu-hide" id="url-op-${url.id}">
+                      <button id="url-edit-${url.id}" type="button" class="default-button" title="Edit url">
+                          <span>Edit</span>
+                      </button>
+                      <button id="url-move-up-${url.id}" type="button" class="default-button" title="Move url up">
+                          <span>Move up</span>
+                      </button>
+                      <button id="url-move-down-${url.id}" type="button" class="default-button" title="Move url down">
+                          <span>Move down</span>
+                      </button>
+                      <button id="url-delete-${url.id}" type="button" class="default-button" title="Delete url">
+                          <span>Delete</span>
+                      </button>
+                  </div>
+                </div>
             </div>`
   }
   urlsArea.innerHTML = output;
 
   for (let url of urls) {
-    delete_button = document.getElementById(`delete-url-${url.id}`);
+    if (urls.indexOf(url) == 0) {
+      const moveUpButton = document.getElementById(`url-move-up-${url.id}`);
+      moveUpButton.style.display = "none";
+    } else if (urls.indexOf(url) == urls.length - 1) {
+      const moveDownButton = document.getElementById(`url-move-down-${url.id}`);
+      moveDownButton.style.display = "none";
+    }
+    delete_button = document.getElementById(`url-delete-${url.id}`);
     delete_button.addEventListener("click", () => {
         removeUrl(url);
+    });
+    edit_button = document.getElementById(`url-edit-${url.id}`)
+    edit_button.addEventListener("click", () => {
+      const label = document.getElementById(`url-display-${url.id}`);
+      const input = document.getElementById(`url-edit-input-${url.id}`);
+      label.style.display = "none";
+      input.style.display = "block";
+      edit_button.style.display = "none";
+    });
+    move_up_button = document.getElementById(`url-move-up-${url.id}`);
+    move_up_button.addEventListener("click", () => {
+      moveUrl("up", url);
+    });
+    move_down_button = document.getElementById(`url-move-down-${url.id}`);
+    move_down_button.addEventListener("click", () => {
+      moveUrl("down", url);
+    });
+    document.addEventListener("click", (event) => {
+      menu = document.getElementById(`url-op-${url.id}`);
+      if (menu) {
+        if (event.target.id === `url-op-${url.id}` || event.target.parentElement.id == `options-url-${url.id}` || event.target.parentElement.id === `url-op-${url.id}`) {
+          if (menu.classList.value.includes("float-menu-hide")) {
+            menu.classList.remove("float-menu-hide");
+            menu.classList.add(`float-menu-${theme}`);
+          } else {
+            menu.classList.remove(`float-menu-${theme}`);
+            menu.classList.add("float-menu-hide");
+          }
+        } else {
+          menu.classList.remove(`float-menu-${theme}`);
+          menu.classList.add("float-menu-hide");
+        }
+      }
     });
   }
 }
@@ -117,6 +186,21 @@ function addUrl () {
 function removeUrl (url) {
     urls.splice(urls.indexOf(url), 1);
     loadUrls();
+}
+
+function moveUrl(direction, url) {
+  if (direction === "up") {
+    const index = urls.indexOf(url);
+    const prevUrl = urls[index - 1];
+    urls[index - 1] = url;
+    urls[index] = prevUrl;
+  } else {
+    const index = urls.indexOf(url);
+    const nextUrl = urls[index + 1];
+    urls[index + 1] = url;
+    urls[index] = nextUrl;
+  }
+  loadUrls();
 }
 
 function maxString (value, type) {

@@ -34,7 +34,6 @@ function getCollections () {
         }
         let output = `<span>No collections found</span>`;
         if (result.collections && result.collections.length > 0) {
-            console.log("collections", result.collections);
             output = "";
             for (let item of result.collections) {
                 if (item) {

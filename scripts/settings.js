@@ -60,9 +60,9 @@ function getCollections () {
                         <div class="border-${result.theme}">
                             <div class="tabs-collection" title="${item.name} collection" id="collection-header-${item.id}">
                             </div>
-                            <form action="" class="form" id="include-url-${item.id}">
+                            <div class="form" id="urls-collection-${item.id}">
                                 ${getUrls(item, result.theme)}
-                            </form>
+                            </div>
                         </div>
                     `;
                 }
@@ -113,7 +113,7 @@ function getUrls (item, theme) {
 function maxString (value, type) {
     switch (type) {
         case "url":
-            if (value.length > 38) return value.substring(0, 35) + "...";
+            if (value.length > 47) return value.substring(0, 50) + "...";
             return value;
         case "title":
             if (value.length > 17) return value.substring(0, 14) + "...";
@@ -134,7 +134,7 @@ function getDefaultCollectionHeader (collection, collections, theme) {
             <button id="collection-options-${collection.id}" type="button" class="edit" title="Collection options">
                 <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 128 512" class="icon-${theme}"><path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z"/></svg>
             </button>
-            <div style="display: none; position: absolute; background-color: #404040; padding: .2rem; flex-direction: column; gap: .3rem; align-items: flex-start;" id="col-op-${collection.id}">
+            <div class="float-menu-hide" id="col-op-${collection.id}">
                 <button id="collection-edit-${collection.id}" class="default-button" title="Edit collection">
                     <span>Edit</span>
                 </button>
@@ -191,21 +191,21 @@ function setCollectionActions (collection, collections, theme) {
             }
         })
     }
-    options_collection_button = document.getElementById(`collection-options-${collection.id}`)
-    if (options_collection_button) {
-        options_collection_button.addEventListener("click", () => {
-            menu = document.getElementById(`col-op-${collection.id}`)
-            menu.style.display = "flex"
-        })
-    }
 
     document.addEventListener("click", (event) => {
         menu = document.getElementById(`col-op-${collection.id}`)
         if (menu) {
             if (event.target.id === `col-op-${collection.id}` || event.target.parentElement.id == `collection-options-${collection.id}`) {
-                menu.style.display = "flex"
+                if (menu.classList.value.includes("float-menu-hide")) {
+                    menu.classList.remove("float-menu-hide");
+                    menu.classList.add(`float-menu-${theme}`);
+                } else {
+                    menu.classList.remove(`float-menu-${theme}`);
+                    menu.classList.add("float-menu-hide");
+                }
             } else {
-                menu.style.display = "none"
+                menu.classList.remove(`float-menu-${theme}`);
+                menu.classList.add("float-menu-hide");
             }
         }
     })
@@ -214,45 +214,10 @@ function setCollectionActions (collection, collections, theme) {
 function getDefaultUrlElement (url, item, collections, theme) {
     url_element = document.getElementById(`included-url-${url.id}`);
     url_element.innerHTML = `
-        <div>
+        <div title="Drag and drop to change url index" class="url-element">
+            <div id="drag-icon-url-${url.id}" style="width: 10px">
+            </div>
             <span class="url-string">${maxString(url.string, "url")}</span>
-        </div>
-        <div class="url-options">
-            <button class="edit" type="button" id="edit-url-button-${url.id}" title="Edit ${url.string} tab from ${item.name} collection">
-                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 512 512" class="icon-${theme}"><path d="M362.7 19.3L314.3 67.7 444.3 197.7l48.4-48.4c25-25 25-65.5 0-90.5L453.3 19.3c-25-25-65.5-25-90.5 0zm-71 71L58.6 323.5c-10.4 10.4-18 23.3-22.2 37.4L1 481.2C-1.5 489.7 .8 498.8 7 505s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L421.7 220.3 291.7 90.3z"/></svg>
-            </button>
-        </div>
-    `
-    setUrlButtonsActions(url, item, collections, theme);
-}
-
-function getEditUrlElement (url, item, collections, theme) {
-    isFirst = false;
-    isLast = false;
-    if (item.urls.indexOf(url) == 0) {
-        isFirst = true
-    }
-    if (item.urls.indexOf(url) == (item.urls.length - 1)) {
-        isLast = true
-    }
-    url_element = document.getElementById(`included-url-${url.id}`);
-    url_element.innerHTML = `
-        <div class="url-edit-options">
-            <button id="url-down-option-${url.id}" type="button" class="url-edit-arrow" ${isLast ? 'disabled' : ''}>
-                <svg xmlns="http://www.w3.org/2000/svg" height="12" width="12" viewBox="0 0 448 512" class="option${isLast ? '-disabled' : ''}-icon"><path d="M413.1 222.5l22.2 22.2c9.4 9.4 9.4 24.6 0 33.9L241 473c-9.4 9.4-24.6 9.4-33.9 0L12.7 278.6c-9.4-9.4-9.4-24.6 0-33.9l22.2-22.2c9.5-9.5 25-9.3 34.3.4L184 343.4V56c0-13.3 10.7-24 24-24h32c13.3 0 24 10.7 24 24v287.4l114.8-120.5c9.3-9.8 24.8-10 34.3-.4z"/></svg>
-            </button>
-            <button id="url-up-option-${url.id}" type="button" class="url-edit-arrow" ${isFirst ? 'disabled' : ''}>
-                <svg xmlns="http://www.w3.org/2000/svg" height="12" width="12" viewBox="0 0 448 512" class="option${isFirst ? '-disabled' : ''}-icon"><path d="M34.9 289.5l-22.2-22.2c-9.4-9.4-9.4-24.6 0-33.9L207 39c9.4-9.4 24.6-9.4 33.9 0l194.3 194.3c9.4 9.4 9.4 24.6 0 33.9L413 289.4c-9.5 9.5-25 9.3-34.3-.4L264 168.6V456c0 13.3-10.7 24-24 24h-32c-13.3 0-24-10.7-24-24V168.6L69.2 289.1c-9.3 9.8-24.8 10-34.3.4z"/></svg>
-            </button>
-            <input class="input-edit input-${theme}" type="text" value="${url.string}" id="input-url-edit-${url.id}" />
-        </div>
-        <div class="url-options">
-            <button class="save" type="button" id="save-url-button-${url.id}" title="Save edit on ${url.string} tab from ${item.name} collection">
-                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 448 512" class="icon-${theme}"><path d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V173.3c0-17-6.7-33.3-18.7-45.3L352 50.7C340 38.7 323.7 32 306.7 32H64zm0 96c0-17.7 14.3-32 32-32H288c17.7 0 32 14.3 32 32v64c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V128zM224 288a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"/></svg>
-            </button>
-            <button class="cancel" type="button" id="cancel-url-button-${url.id}" title="Cancel edit on ${url.string} tab from ${item.name} collection">
-                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 384 512" class="danger-icon"><path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"/></svg>
-            </button>
         </div>
     `
     setUrlButtonsActions(url, item, collections, theme);
@@ -260,6 +225,14 @@ function getEditUrlElement (url, item, collections, theme) {
 
 function setUrlButtonsActions (url, item, collections, theme) {
     url_element = document.getElementById(`included-url-${url.id}`);
+    url_element.addEventListener("mouseenter", () => {
+        dragIcon = document.getElementById(`drag-icon-url-${url.id}`);
+        dragIcon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width=10 height=10 viewBox="0 0 320 512" class="icon-${theme}"><path d="M40 352l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40zm192 0l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40zM40 320c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0zM232 192l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40zM40 160c-22.1 0-40-17.9-40-40L0 72C0 49.9 17.9 32 40 32l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0zM232 32l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40z"/></svg>`
+    });
+    url_element.addEventListener("mouseleave", () => {
+        dragIcon = document.getElementById(`drag-icon-url-${url.id}`);
+        dragIcon.innerHTML = "";
+    });
     if (url_element) {
         url_element.addEventListener("dragstart", (event) => {
             selected_url = event.target.id;
@@ -296,48 +269,6 @@ function setUrlButtonsActions (url, item, collections, theme) {
             
             item.urls.splice(selected_element_index, 1);
             item.urls.splice(target_element_index < selected_element_index ? target_element_index - 1 : target_element_index, 0, selected_element);
-            chrome.storage.local.set({ "collections": collections });
-        });
-    }
-    edit_button = document.getElementById(`edit-url-button-${url.id}`);
-    if (edit_button) {
-        edit_button.addEventListener("click", (event) => {
-            getEditUrlElement(url, item, collections, theme);
-        });
-    }
-    save_button = document.getElementById(`save-url-button-${url.id}`);
-    if (save_button) {
-        save_button.addEventListener("click", (event) => {
-            url.string = document.getElementById(`input-url-edit-${url.id}`).value;
-            getDefaultUrlElement(url, item, collections, theme);
-            chrome.storage.local.set({ "collections": collections });
-        });
-    }
-    cancel_button = document.getElementById(`cancel-url-button-${url.id}`);
-    if (cancel_button) {
-        cancel_button.addEventListener("click", (event) => {
-            getDefaultUrlElement(url, item, collections, theme);
-            chrome.storage.local.set({ "collections": collections });
-        });
-    }
-    move_up_button = document.getElementById(`url-up-option-${url.id}`);
-    if (move_up_button) {
-        move_up_button.addEventListener("click", (event) => {
-            current_index = item.urls.indexOf(url);
-            element_before = item.urls[current_index - 1]
-            item.urls[current_index - 1] = url
-            item.urls[current_index] = element_before
-            chrome.storage.local.set({ "collections": collections });
-        });
-    }
-    move_down_button = document.getElementById(`url-down-option-${url.id}`);
-    if (move_down_button) {
-        move_down_button.addEventListener("click", (event) => {
-            current_index = item.urls.indexOf(url);
-            element_after = item.urls[current_index + 1]
-            item.urls[current_index + 1] = url
-            item.urls[current_index] = element_after
-            collections[collections.indexOf(item)] = item
             chrome.storage.local.set({ "collections": collections });
         });
     }

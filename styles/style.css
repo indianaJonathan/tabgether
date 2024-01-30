@@ -226,6 +226,29 @@ a {
     font-size: 1.1rem;
 }
 
+.float-menu-hide {
+    display: none;
+}
+
+.float-menu-dark, .float-menu-light {
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    gap: .3rem;
+    padding: .2rem;
+    position: absolute;
+}
+
+.float-menu-dark {
+    background-color: #404040;
+    color: #909090;
+}
+
+.float-menu-light {
+    background-color: #909090;
+    color: #404040;
+}
+
 @keyframes bounce-sides {
     0% {
         transform: translateX(0);
