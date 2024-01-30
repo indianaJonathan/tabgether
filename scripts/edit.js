@@ -106,20 +106,20 @@ function loadUrls () {
                 <span style="display: block; padding: .3rem 2rem .3rem .3rem; font-size: 1.3rem;" id="url-display-${url.id}">${maxString(url.string, "url")}</span>
                 <input style="display: none;" id="url-edit-input-${url.id}" type="text" value="${url.string}" class="input-${theme}"/>
                 <div class="url-buttons">
-                  <button class="icon-button" type="button" id="options-url-${url.id}">
+                  <button class="icon-button" type="button" id="options-url-${url.id}" title="URL options">
                     <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 128 512" class="icon-${theme}"><path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z"/></svg>
                   </button>
                   <div class="float-menu-hide" id="url-op-${url.id}">
-                      <button id="url-edit-${url.id}" type="button" class="default-button" title="Edit url">
+                      <button id="url-edit-${url.id}" type="button" class="default-button" title="Edit URL">
                           <span>Edit</span>
                       </button>
-                      <button id="url-move-up-${url.id}" type="button" class="default-button" title="Move url up">
+                      <button id="url-move-up-${url.id}" type="button" class="default-button" title="Move URL up">
                           <span>Move up</span>
                       </button>
-                      <button id="url-move-down-${url.id}" type="button" class="default-button" title="Move url down">
+                      <button id="url-move-down-${url.id}" type="button" class="default-button" title="Move URL down">
                           <span>Move down</span>
                       </button>
-                      <button id="url-delete-${url.id}" type="button" class="default-button" title="Delete url">
+                      <button id="url-delete-${url.id}" type="button" class="default-button" title="Delete URL">
                           <span>Delete</span>
                       </button>
                   </div>

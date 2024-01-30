@@ -192,18 +192,22 @@ function setCollectionActions (collection, collections, theme) {
         })
     }
 
+    optionsButton = document.getElementById(`collection-options-${collection.id}`);
+    optionsButton.addEventListener("click", () => {
+        menu = document.getElementById(`col-op-${collection.id}`);
+        if (menu.classList.value.includes("float-menu-hide")) {
+            menu.classList.remove("float-menu-hide");
+            menu.classList.add(`float-menu-${theme}`);
+        } else {
+            menu.classList.remove(`float-menu-${theme}`);
+            menu.classList.add("float-menu-hide");
+        }
+    });
+
     document.addEventListener("click", (event) => {
-        menu = document.getElementById(`col-op-${collection.id}`)
+        menu = document.getElementById(`col-op-${collection.id}`);
         if (menu) {
-            if (event.target.id === `col-op-${collection.id}` || event.target.parentElement.id == `collection-options-${collection.id}`) {
-                if (menu.classList.value.includes("float-menu-hide")) {
-                    menu.classList.remove("float-menu-hide");
-                    menu.classList.add(`float-menu-${theme}`);
-                } else {
-                    menu.classList.remove(`float-menu-${theme}`);
-                    menu.classList.add("float-menu-hide");
-                }
-            } else {
+            if (event.target.id != `col-op-${collection.id}` && event.target.parentElement.id != `collection-options-${collection.id}`) {
                 menu.classList.remove(`float-menu-${theme}`);
                 menu.classList.add("float-menu-hide");
             }
