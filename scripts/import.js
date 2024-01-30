@@ -1,10 +1,28 @@
 var import_file = null;
 
 window.onload = () => {
-    getCollections();
+    getLocation();
     chrome.storage.onChanged.addListener(() => {
+        getLocation();
+    });
+}
+
+function getLocation() {
+    chrome.storage.local.get(["language", "theme"]).then(async (result) => {
+        selectedLang = "en-us";
+        if (result.language) {
+            selectedLang = result.language;
+        } else {
+            chrome.storage.local.set({"language": "en-us"});
+        }
+        lang = await fetch(`../languages/${selectedLang}.json`)
+            .then((response) => response.json());
+        getListeners();
         getCollections();
     });
+}
+
+function getListeners () {
     fileInput = document.getElementById("import-file-input");
     fileComponent = document.getElementById("import-file-component");
     fileComponent.addEventListener("click", (event) => {
@@ -18,18 +36,18 @@ window.onload = () => {
                 fileComponent.style.background = "#A0E85C";
                 fileComponent.style.border = "1px solid #25F400";
                 buttons = document.getElementById("import-buttons");
-                buttons.title = "Import collections from file"
+                buttons.title = lang.others.titles.import_from_file;
                 buttons.innerHTML = `
-                    <button type="button" class="import-button" id="import-button">Import</button>
+                    <button type="button" class="import-button" id="import-button">${lang.buttons.captions.import}</button>
                 `
                 import_file = fileInput.files[0];
             } else {
-                alert('Incorrect file format');
+                alert(lang.others.errors.incorret_type);
                 fileInput.value = '';
                 buttons = document.getElementById("import-buttons");
                 buttons.title = "Cannot import collections without a file"
                 buttons.innerHTML = `
-                    <button type="button" class="import-button-disabled" id="import-button-disabled" disabled>Import</button>
+                    <button type="button" class="import-button-disabled" id="import-button-disabled" disabled>${lang.buttons.captions.import}</button>
                 `
             }
         }
@@ -38,7 +56,10 @@ window.onload = () => {
 }
 
 function getActions () {
+    backButton = document.getElementById("back");
+    backButton.title = lang.buttons.titles.back;
     button = document.getElementById("import-button");
+    button.innerHTML = lang.buttons.captions.import;
     if (button) {
         button.addEventListener("click", (event) => {
             chrome.storage.local.get(["collections"]).then((result) => {
@@ -80,18 +101,26 @@ function getCollections () {
     chrome.storage.local.get(["collections", "theme"]).then((result) => {
         pageMain = document.getElementById("import-page");
         pageMain.classList.value = `full-page-${result.theme}`
-        container = document.getElementById("container")
+        pageTitle = document.getElementById("page-title");
+        pageTitle.innerHTML = lang.titles.import_collections;
+        container = document.getElementById("container");
         container.classList.value = `container-${result.theme}`
-        back_icon = document.getElementById("back-icon")
+        back_icon = document.getElementById("back-icon");
+        backButton = document.getElementById("back");
+        backButton.title = lang.buttons.titles.back;
+        selectFileInput = document.getElementById("select-file");
+        selectFileInput.innerHTML = lang.others.captions.select_file;
+        buttons = document.getElementById("import-buttons");
+        buttons.innerHTML = `<button type="button" class="import-button-disabled" id="import-button-disabled" disabled>${lang.buttons.captions.import}</button>`
         icons = [back_icon]
         for (icon of icons) {
             icon.classList.value = `icon-${result.theme}`
         }
         element = document.getElementById("collections-size");
         if (result.collections && result.collections.length > 0) {
-            element.innerHTML = `Current collections: ${result.collections.length}`
+            element.innerHTML = `${lang.others.captions.current_collections} ${result.collections.length}`
         } else {
-            element.innerHTML += `Current collections: 0`
+            element.innerHTML += `${lang.others.captions.current_collections} 0`
         }
     });
 }

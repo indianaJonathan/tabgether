@@ -30,7 +30,8 @@
   "others": {
     "titles": { 
       "drag_drop_url": "Drag and drop to change URL index",
-      "open_collection": "Open collection"
+      "open_collection": "Open collection",
+      "import_from_file": "Import collections from file"
     },
     "span": {
       "no_collections_found": "No collection found"
@@ -40,7 +41,9 @@
       "current_collections": "Current collections:"
     },
     "errors": {
-      "no_tabs": "No tabs to open. Add tabs to this collection in the app settings"
+      "no_tabs": "No tabs to open. Add tabs to this collection in the app settings",
+      "incorret_type": "Incorrect file format",
+      "no_file": "Cannot import collections without a file"
     }
   }
 }

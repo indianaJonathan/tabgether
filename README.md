@@ -40,6 +40,7 @@ The collection ID color is generated randomly at collection creation and can hav
 - Import collections (JSON file)
 - Light theme
 - Collection color change
+- Change app location (language)
 
 *You can use this project to improve it or to develop your OPEN SOURCE project. No commercialization allowed*
 

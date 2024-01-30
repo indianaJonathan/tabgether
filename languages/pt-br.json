@@ -36,7 +36,8 @@
   "others": {
     "titles": { 
       "drag_drop_url": "Arraste e solte para mudar a ordem da URL",
-      "open_collection": "Abrir coleção"
+      "open_collection": "Abrir coleção",
+      "import_from_file": "Importar coleções usando um arquivo"
     },
     "span": {
       "no_collections_found": "Nenhuma coleção encontrada"
@@ -46,7 +47,9 @@
       "current_collections": "Coleções atuais:"
     },
     "errors": {
-      "no_tabs": "Não há URLs para abrir. Adicione URLs à essa coleção nas configurações do aplicativo"
+      "no_tabs": "Não há URLs para abrir. Adicione URLs à essa coleção nas configurações do aplicativo",
+      "incorret_type": "Formato do arquivo errado",
+      "no_file": "Não é possível importar coleções sem um arquivo"
     }
   }
 }
