@@ -38,12 +38,15 @@
     },
     "captions": {
       "select_file": "Select file",
-      "current_collections": "Current collections:"
+      "current_collections": "Current collections:",
+      "select_collection": "Select collection",
+      "deselect_collection": "Deselect collection"
     },
     "errors": {
       "no_tabs": "No tabs to open. Add tabs to this collection in the app settings",
       "incorret_type": "Incorrect file format",
-      "no_file": "Cannot import collections without a file"
+      "no_file": "Cannot import collections without a file",
+      "no_collection_selected": "Cannot export without select any collection"
     }
   }
 }

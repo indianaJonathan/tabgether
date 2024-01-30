@@ -44,12 +44,15 @@
     },
     "captions": {
       "select_file": "Selecionar arquivo",
-      "current_collections": "Coleções atuais:"
+      "current_collections": "Coleções atuais:",
+      "select_collection": "Selecionar coleção",
+      "deselect_collection": "Desselecionar coleção"
     },
     "errors": {
       "no_tabs": "Não há URLs para abrir. Adicione URLs à essa coleção nas configurações do aplicativo",
       "incorret_type": "Formato do arquivo errado",
-      "no_file": "Não é possível importar coleções sem um arquivo"
+      "no_file": "Não é possível importar coleções sem um arquivo",
+      "no_collection_selected": "Não é possível exportar sem selecionar nenhuma coleção"
     }
   }
 }
