@@ -13,7 +13,10 @@
       "url_options": "URL options",
       "add_collection": "Add collection",
       "save": "Save",
-      "back": "Back"
+      "back": "Back",
+      "settings": "Settings",
+      "import": "Import",
+      "export": "Export"
     },
     "captions": { 
       "edit": "Edit",
@@ -26,7 +29,8 @@
   },
   "others": {
     "titles": { 
-      "drag_drop_url": "Drag and drop to change URL index"
+      "drag_drop_url": "Drag and drop to change URL index",
+      "open_collection": "Open collection"
     },
     "span": {
       "no_collections_found": "No collection found"
@@ -34,6 +38,9 @@
     "captions": {
       "select_file": "Select file",
       "current_collections": "Current collections:"
+    },
+    "errors": {
+      "no_tabs": "No tabs to open. Add tabs to this collection in the app settings"
     }
   }
 }

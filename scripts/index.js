@@ -1,16 +1,39 @@
 var theme = "";
+var lang;
 
 window.onload = () => {
-    getCollections();
+    getLocation();
     chrome.storage.onChanged.addListener(() => {
+        getLocation();
+    });
+}
+
+function getLocation() {
+    chrome.storage.local.get(["language", "theme"]).then(async (result) => {
+        selectedLang = "en-us";
+        if (result.language) {
+            selectedLang = result.language;
+        } else {
+            chrome.storage.local.set({"language": "en-us"});
+        }
+        lang = await fetch(`../languages/${selectedLang}.json`)
+            .then((response) => response.json());
         getCollections();
     });
 }
 
 function getCollections () {
-    chrome.storage.local.get(["collections", "theme"]).then((result) => {
+    chrome.storage.local.get(["collections", "theme", "language"]).then((result) => {
         pageMain = document.getElementById("index-page");
         listClasses = pageMain.classList;
+        pageTitle = document.getElementById("page-title");
+        pageTitle.innerHTML = lang.titles.your_collections;
+        settingsButton = document.getElementById("settings-button");
+        settingsButton.title = lang.buttons.titles.settings;
+        importButton = document.getElementById("import-button");
+        importButton.title = lang.buttons.titles.import;
+        exportButton = document.getElementById("export-button");
+        exportButton.title = lang.buttons.titles.export;
         import_icon = document.getElementById("import-icon");
         export_icon = document.getElementById("export-icon");
         settings_icon = document.getElementById("settings-icon");
@@ -32,14 +55,14 @@ function getCollections () {
             }
             chrome.storage.local.set({ "theme": "dark" });
         }
-        let output = `<span>No collections found</span>`;
+        let output = `<span>${lang.others.span.no_collections_found}</span>`;
         if (result.collections && result.collections.length > 0) {
             output = "";
             for (let item of result.collections) {
                 if (item) {
                     output += `
                         <div class="border-${result.theme}" id="tab-collection-${item.id}">
-                            <div class="tabs-collection" title="Open ${item?.name?.toLowerCase()} collection">
+                            <div class="tabs-collection" title="${lang.others.titles.open_collection}">
                                 <div class="collection-info">
                                     <div class="collection-id" style="background-color: ${item.color};"></div>
                                     <span class="collection-name">${maxString(item.name, "title")}</span>
@@ -73,7 +96,7 @@ function getCollections () {
                                 chrome.tabs.remove(current_tab[0].id);
                             }
                         } else {
-                            alert("No tabs to open. Add tabs to this collection in the app settings");
+                            alert(lang.others.errors.no_tabs);
                         }
                     });
                 }

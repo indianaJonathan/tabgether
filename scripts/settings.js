@@ -19,7 +19,6 @@ function getLocation() {
             .then((response) => response.json());
         getCollections();
     });
-    
 }
 
 function getCollections () {

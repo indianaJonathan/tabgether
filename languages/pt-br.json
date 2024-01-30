@@ -19,7 +19,10 @@
       "delete_collection": "Excluir coleção",
       "edit_collection": "Editar coleção",
       "move_collection_up": "Mover coleção para cima",
-      "move_collection_down": "Mover coleção para baixo"
+      "move_collection_down": "Mover coleção para baixo",
+      "settings": "Configurações",
+      "import": "Importar",
+      "export": "Exportar"
     },
     "captions": { 
       "edit": "Editar",
@@ -32,7 +35,8 @@
   },
   "others": {
     "titles": { 
-      "drag_drop_url": "Arraste e solte para mudar a ordem da URL"
+      "drag_drop_url": "Arraste e solte para mudar a ordem da URL",
+      "open_collection": "Abrir coleção"
     },
     "span": {
       "no_collections_found": "Nenhuma coleção encontrada"
@@ -40,6 +44,9 @@
     "captions": {
       "select_file": "Selecionar arquivo",
       "current_collections": "Coleções atuais:"
+    },
+    "errors": {
+      "no_tabs": "Não há URLs para abrir. Adicione URLs à essa coleção nas configurações do aplicativo"
     }
   }
 }
