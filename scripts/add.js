@@ -1,30 +1,53 @@
 var add_collection = {id: "", name: "", color: "", urls: []}
 var urls = []
+var lang;
 
 window.onload = () => {
-  loadData();
-  loadListeners();
+  getLocation();
+}
+
+function getLocation() {
+  chrome.storage.local.get(["language", "theme"]).then(async (result) => {
+      selectedLang = "en-us";
+      if (result.language) {
+          selectedLang = result.language;
+      } else {
+          chrome.storage.local.set({"language": "en-us"});
+      }
+      lang = await fetch(`../languages/${selectedLang}.json`)
+          .then((response) => response.json());
+        loadData();
+        loadListeners();
+  });
 }
 
 function loadData () {
   chrome.storage.local.get(["theme"]).then((result) => {
     pageMain = document.getElementById("add-page");
-    collectionNameInput = document.getElementById("collection-name-input")
-    collectionColorInput = document.getElementById("collection-color-input")
-    newUrlInput = document.getElementById("new-url")
-    urlsArea = document.getElementById("urls-area")
-    back_icon = document.getElementById("back-icon")
-    save_icon = document.getElementById("save-icon")
+    pageTitle = document.getElementById("page-title");
+    collectionNameInput = document.getElementById("collection-name-input");
+    collectionColorLabel = document.getElementById("collection-color-label");
+    collectionColorInput = document.getElementById("collection-color-input");
+    newUrlInput = document.getElementById("new-url");
+    urlsArea = document.getElementById("urls-area");
+    back_icon = document.getElementById("back-icon");
+    save_icon = document.getElementById("save-icon");
+    saveButton = document.getElementById("save-button");
     icons = [back_icon]
     for (icon of icons) {
         icon.classList.value = `icon-${result.theme}`
     }
     pageMain.classList.add(`full-page-${result.theme}`);
+    pageTitle.innerHTML = lang.titles.add_collection;
     collectionNameInput.classList.add(`input-${result.theme}`)
+    collectionNameInput.placeholder = lang.others.placeholders.collection_name;
+    collectionColorLabel.innerHTML = lang.others.span.color;
     collectionColorInput.classList.add(`input-color-${result.theme}`)
     urlsArea.classList.add(`border-${result.theme}`)
     newUrlInput.classList.add(`input-${result.theme}`)
+    newUrlInput.placeholder = lang.others.placeholders.type_url;
     save_icon.classList.add(`icon-dark`)
+    saveButton.title = lang.buttons.titles.save;
 
     collectionColorInput.value = (getRandomColor());
   });

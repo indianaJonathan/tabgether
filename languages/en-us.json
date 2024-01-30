@@ -4,7 +4,8 @@
     "your_collections": "Your collections",
     "export_collections": "Export collections",
     "import_collections": "Import collections",
-    "edit_collection": "Edit collection"
+    "edit_collection": "Edit collection",
+    "add_collection": "Add collection"
   },
   "buttons": { 
     "titles": {
@@ -60,7 +61,8 @@
       "no_collection_selected": "Cannot export without select any collection"
     },
     "placeholders": {
-      "type_url": "Type URL here"
+      "type_url": "Type URL here",
+      "collection_name": "Collection name"
     }
   }
 }

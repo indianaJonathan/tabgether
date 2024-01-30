@@ -4,7 +4,8 @@
     "your_collections": "Suas coleções",
     "export_collections": "Exportar coleções",
     "import_collections": "Importar coleções",
-    "edit_collection": "Editar coleção"
+    "edit_collection": "Editar coleção",
+    "add_collection": "Adicionar coleção"
   },
   "buttons": { 
     "titles": {
@@ -31,7 +32,7 @@
     "captions": { 
       "edit": "Editar",
       "move_up": "Mover para cima",
-      "move_down": "Muver para baixo",
+      "move_down": "Mover para baixo",
       "delete": "Excluir",
       "import": "Importar",
       "export": "Exportar"
@@ -60,7 +61,8 @@
       "no_collection_selected": "Não é possível exportar sem selecionar nenhuma coleção"
     },
     "placeholders": {
-      "type_url": "Digite a URL aqui"
+      "type_url": "Digite a URL aqui",
+      "collection_name": "Nome da coleção"
     }
   }
 }
