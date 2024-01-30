@@ -129,45 +129,46 @@ function loadUrls () {
   urlsArea.innerHTML = output;
 
   for (let url of urls) {
+    const moveUpButton = document.getElementById(`url-move-up-${url.id}`);
+    const moveDownButton = document.getElementById(`url-move-down-${url.id}`);
+    const delete_button = document.getElementById(`url-delete-${url.id}`);
+    const edit_button = document.getElementById(`url-edit-${url.id}`);
+    const label = document.getElementById(`url-display-${url.id}`);
+    const input = document.getElementById(`url-edit-input-${url.id}`);
     if (urls.indexOf(url) == 0) {
-      const moveUpButton = document.getElementById(`url-move-up-${url.id}`);
       moveUpButton.style.display = "none";
     } else if (urls.indexOf(url) == urls.length - 1) {
-      const moveDownButton = document.getElementById(`url-move-down-${url.id}`);
       moveDownButton.style.display = "none";
     }
-    delete_button = document.getElementById(`url-delete-${url.id}`);
     delete_button.addEventListener("click", () => {
         removeUrl(url);
     });
-    edit_button = document.getElementById(`url-edit-${url.id}`)
     edit_button.addEventListener("click", () => {
-      const label = document.getElementById(`url-display-${url.id}`);
-      const input = document.getElementById(`url-edit-input-${url.id}`);
       label.style.display = "none";
       input.style.display = "block";
       edit_button.style.display = "none";
     });
-    move_up_button = document.getElementById(`url-move-up-${url.id}`);
-    move_up_button.addEventListener("click", () => {
+    moveUpButton.addEventListener("click", () => {
       moveUrl("up", url);
     });
-    move_down_button = document.getElementById(`url-move-down-${url.id}`);
-    move_down_button.addEventListener("click", () => {
+    moveDownButton.addEventListener("click", () => {
       moveUrl("down", url);
+    });
+    optionsButton = document.getElementById(`options-url-${url.id}`);
+    optionsButton.addEventListener("click", () => {
+      menu = document.getElementById(`url-op-${url.id}`);
+      if (menu.classList.value.includes("float-menu-hide")) {
+        menu.classList.remove("float-menu-hide");
+        menu.classList.add(`float-menu-${theme}`);
+      } else {
+        menu.classList.remove(`float-menu-${theme}`);
+        menu.classList.add("float-menu-hide");
+      }
     });
     document.addEventListener("click", (event) => {
       menu = document.getElementById(`url-op-${url.id}`);
       if (menu) {
-        if (event.target.id === `url-op-${url.id}` || event.target.parentElement.id == `options-url-${url.id}` || event.target.parentElement.id === `url-op-${url.id}`) {
-          if (menu.classList.value.includes("float-menu-hide")) {
-            menu.classList.remove("float-menu-hide");
-            menu.classList.add(`float-menu-${theme}`);
-          } else {
-            menu.classList.remove(`float-menu-${theme}`);
-            menu.classList.add("float-menu-hide");
-          }
-        } else {
+        if (event.target.id != `url-op-${url.id}` && event.target.parentElement.id != `options-url-${url.id}` && event.target.parentElement.id != `url-op-${url.id}`) {
           menu.classList.remove(`float-menu-${theme}`);
           menu.classList.add("float-menu-hide");
         }
