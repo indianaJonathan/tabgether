@@ -29,10 +29,11 @@ function getListeners () {
         fileInput.click();
     });
     fileInput.addEventListener("change", (event) => {
+        const selectFileCaption = document.getElementById("select-file");
         if (fileInput.files.length > 0) {
             file_uploaded = fileInput.files[0];
             if (file_uploaded.type == "application/json") {
-                fileComponent.innerHTML = `<span style="color: black">${fileInput.files[0].name}</span>`;
+                selectFileCaption.innerHTML = fileInput.files[0].name;
                 fileComponent.style.background = "#A0E85C";
                 fileComponent.style.border = "1px solid #25F400";
                 buttons = document.getElementById("import-buttons");
@@ -97,8 +98,12 @@ function getActions () {
                     }
                     current_collections.push(...newCollections);
                     chrome.storage.local.set({ "collections": current_collections });
-                    alert(`${collections.length} collection(s) imported`);
                     document.getElementById("import-file-input").value = "";
+                    const selectFileCaption = document.getElementById("select-file");
+                    selectFileCaption.innerHTML = lang.others.captions.select_file;
+                    const fileComponent = document.getElementById("import-file-component");
+                    fileComponent.style = null;
+                    fileComponent.classList.value = "input-file";
                 };
                 reader.readAsText(import_file);
             });
