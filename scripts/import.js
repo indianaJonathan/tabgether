@@ -63,23 +63,32 @@ function getActions () {
     if (button) {
         button.addEventListener("click", (event) => {
             chrome.storage.local.get(["collections"]).then((result) => {
-                current_collections = result.collections && result.collections.length > 0 ? result.collections : [];
+                const current_collections = result.collections && result.collections.length > 0 ? result.collections : [];
                 var reader = new FileReader();
                 reader.onload = (event) => {
                     var collections = JSON.parse(event.target.result);
-                    const newCollections = [];
+                    const newCollections = [...current_collections];
                     for (let collection of collections) {
-                        const collectionId = current_collections.length > 0 ? current_collections[current_collections.length - 1].id + 1 : 1;
+                        var available = false;
+                        newId = 0
+                        while (!available) {
+                            const collec = newCollections.find((c) => c.id.toString() == newId.toString())
+                            if (!collec) {
+                                available = true;
+                            } else {
+                                newId += 1;
+                            }
+                        }
                         const newUrls = [];
                         for (let url of collection.urls) {
                             const newUrl = { 
-                                "id": `${collectionId}-${collection.urls.indexOf(url)}`, 
+                                "id": `${newId}-${collection.urls.indexOf(url)}`, 
                                 "string": url.string.startsWith("http") ? url.string : `https://${url.string}` 
                             }
                             newUrls.push(newUrl);
                         }
                         const newCollection = { 
-                            "id": collectionId, 
+                            "id": newId, 
                             "name": collection.name, 
                             "urls": newUrls,
                             "color": collection.color
