@@ -1,62 +1,71 @@
-var add_collection = {id: "", name: "", color: "", urls: []}
-var urls = []
-var lang;
+var urls = [];
+var locale;
 
-window.onload = () => {
-  getLocation();
+window.onload = async () => {
+  // Get language from storage
+  const result = await chrome.storage.local.get(["language"]);
+  const selectedLang = result.language || "en-us";
+  // Get locale from file
+  locale = await fetch(`../languages/${selectedLang}.json`)
+    .then((response) => response.json());
+
+  applyLocation();
+  applyTheme();
+  loadListeners();
 }
 
-function getLocation() {
-  chrome.storage.local.get(["language", "theme"]).then(async (result) => {
-      selectedLang = "en-us";
-      if (result.language) {
-          selectedLang = result.language;
-      } else {
-          chrome.storage.local.set({"language": "en-us"});
-      }
-      lang = await fetch(`../languages/${selectedLang}.json`)
-          .then((response) => response.json());
-        loadData();
-        loadListeners();
-  });
+async function applyLocation() {
+  // Get elements to load data
+  const pageTitle = document.getElementById("page-title");
+  const collectionNameInput = document.getElementById("collection-name-input");
+  const collectionColorLabel = document.getElementById("collection-color-label");
+  const collectionColorInput = document.getElementById("collection-color-input");
+  const newUrlInput = document.getElementById("new-url");
+  const saveButton = document.getElementById("save-button");
+
+  // Load data inner elements
+  pageTitle.innerHTML = locale.titles.add_collection;
+  collectionNameInput.placeholder = locale.others.placeholders.collection_name;
+  collectionColorLabel.innerHTML = locale.others.span.color;
+  newUrlInput.placeholder = locale.others.placeholders.type_url;
+  saveButton.title = locale.buttons.titles.save;
+
+  collectionColorInput.value = (getRandomColor());
 }
 
-function loadData () {
-  chrome.storage.local.get(["theme"]).then((result) => {
-    pageMain = document.getElementById("add-page");
-    pageTitle = document.getElementById("page-title");
-    collectionNameInput = document.getElementById("collection-name-input");
-    collectionColorLabel = document.getElementById("collection-color-label");
-    collectionColorInput = document.getElementById("collection-color-input");
-    newUrlInput = document.getElementById("new-url");
-    urlsArea = document.getElementById("urls-area");
-    back_icon = document.getElementById("back-icon");
-    save_icon = document.getElementById("save-icon");
-    saveButton = document.getElementById("save-button");
-    icons = [back_icon]
-    for (icon of icons) {
-        icon.classList.value = `icon-${result.theme}`
-    }
-    pageMain.classList.add(`full-page-${result.theme}`);
-    pageTitle.innerHTML = lang.titles.add_collection;
-    collectionNameInput.classList.add(`input-${result.theme}`)
-    collectionNameInput.placeholder = lang.others.placeholders.collection_name;
-    collectionColorLabel.innerHTML = lang.others.span.color;
-    collectionColorInput.classList.add(`input-color-${result.theme}`)
-    urlsArea.classList.add(`border-${result.theme}`)
-    newUrlInput.classList.add(`input-${result.theme}`)
-    newUrlInput.placeholder = lang.others.placeholders.type_url;
-    save_icon.classList.add(`icon-dark`)
-    saveButton.title = lang.buttons.titles.save;
+async function applyTheme() {
+  // Get theme from storage
+  const result = chrome.storage.local.get(["theme"]);
+  const theme = result.theme || "dark";
 
-    collectionColorInput.value = (getRandomColor());
-  });
+  // Get elements to apply theme
+  const pageMain = document.getElementById("add-page");
+  const collectionNameInput = document.getElementById("collection-name-input");
+  const collectionColorInput = document.getElementById("collection-color-input");
+  const urlsArea = document.getElementById("urls-area");
+  const newUrlInput = document.getElementById("new-url");
+  const backIcon = document.getElementById("back-icon");
+  const saveIcon = document.getElementById("save-icon");
+  const icons = [backIcon]
+
+  // Apply the theme to the elements
+  pageMain.classList.add(`full-page-${theme}`);
+  collectionNameInput.classList.add(`input-${theme}`);
+  collectionColorInput.classList.add(`input-color-${theme}`);
+  urlsArea.classList.add(`border-${theme}`);
+  newUrlInput.classList.add(`input-${theme}`)
+  for (const icon of icons) {
+    icon.classList.value = `icon-${theme}`
+  }
+  saveIcon.classList.add(`icon-dark`)
 }
 
-function loadListeners () {
+function loadListeners() {
   var addingUrl = false;
+
   const add_url_button = document.getElementById("add-url-button");
-  add_url_button.addEventListener("click", (event) => {addUrl()});
+  add_url_button.addEventListener("click", () => addUrl);
+
   const newUrlInput = document.getElementById("new-url");
   newUrlInput.addEventListener("focus", () => {
     addingUrl = true;
@@ -64,73 +73,82 @@ function loadListeners () {
   newUrlInput.addEventListener("blur", () => {
     addingUrl = false;
   });
+
   const collection_form = document.getElementById("add-new-collection-form");
   collection_form.addEventListener("submit", async (event) => {
     if (addingUrl) {
       event.preventDefault();
       addUrl();
     } else {
-      const nameInput = document.getElementById("collection-name-input")
+      const nameInput = document.getElementById("collection-name-input");
+      const colorInput = document.getElementById("collection-color-input");
       if (nameInput.value == "" || urls.length == 0) {
         event.preventDefault();
         errors = []
         if (nameInput.value == "") {
-          errors.push('The field "Name" is mandatory');
+          errors.push(locale.others.errors.name_field_mandatory);
         }
         if (urls.length == 0) {
-          errors.push('You cannot add a collection without any URLs');
+          errors.push(locale.others.errors.add_collection_without_urls);
         }
-        alert(`Could not save the new collection due to these erros: ${errors.join('\n')}`);
+        alert(`${locale.others.errors.could_not_save_collection} \n${errors.join('\n')}`);
       } else {
-        const currentCollections = await chrome.storage.local.get(["collections"]);
-        const cols = currentCollections.collections || [];
-        var available = false;
-        newId = 0
-        while (!available) {
-          const collec = cols.find((c) => c.id.toString() == newId.toString())
-          if (!collec) {
-            available = true;
-          } else {
-            newId += 1;
-          }
+        const newCollection = {
+          id: crypto.randomUUID(),
+          name: nameInput.value,
+          color: colorInput.value,
+          urls: urls.map((url) => {
+            return {
+              id: crypto.randomUUID(),
+              string: url.string,
+            }
+          }),
         }
-        add_collection.id = `${newId}`;
-        add_collection.name = nameInput.value;
-        add_collection.color = document.getElementById("collection-color-input").value;
-        fixedUrls = [];
-        for (let url of urls) {
-          newUrl = {string: "", id: ""}
-          newUrl.string = url.string;
-          newUrl.id = `${newId}-${fixedUrls.length + 1}`
-          fixedUrls.push(newUrl);
-        }
-        add_collection.urls = fixedUrls;
-        cols.push(add_collection);
-        chrome.storage.local.set({ "collections": cols } );
+        const result = await chrome.storage.local.get(["collections"]);
+        const collections = result.collections || [];
+        collections.push(newCollection);
+        chrome.storage.local.set({ "collections": collections });
         navigation.back();
       }
     }
   });
 }
 
-function loadUrls () {
-  urlsArea = document.getElementById("included-urls");
-  output = ""
-  for (let url of urls) {
-    output += `<span>${url.string}</span>`
-  }
-  urlsArea.innerHTML = output;
+function loadUrls() {
+  const urlsArea = document.getElementById("included-urls");
+  urlsArea.innerHTML = urls.map((url) => {
+    return UrlElement(url);
+  }).join("");
 }
 
-function addUrl () {
-  newUrlInput = document.getElementById("new-url");
-  urls.push({string: newUrlInput.value})
+function UrlElement(url) {
+  return `<span>${url.string}</span>`
+}
+
+function addUrl() {
+  const newUrlInput = document.getElementById("new-url");
+  if (!validateUrl(newUrlInput.value)) {
+    alert(locale.others.errors.invalid_url);
+    return;
+  }
+  urls.push({ string: newUrlInput.value })
   newUrlInput.value = ""
   loadUrls();
 }
 
-function getRandomColor () {
+function getRandomColor() {
   const colors = ["#C66750", "#5CA758", "#B2B059", "#5D80B5"];
-  var color = colors[Math.floor(Math.random()*colors.length)];
+  const color = colors[Math.floor(Math.random() * colors.length)];
   return color;
+}
+
+function validateUrl(url) {
+  if (!url.startsWith("https://") && !url.startsWith("http://")) {
+    return false;
+  }
+  if (url === "") {
+    return false;
+  }
+
+  return true;
 }

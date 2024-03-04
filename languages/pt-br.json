@@ -7,7 +7,7 @@
     "edit_collection": "Editar coleção",
     "add_collection": "Adicionar coleção"
   },
-  "buttons": { 
+  "buttons": {
     "titles": {
       "toggle_mode_dark": "Mudar para tema escuro",
       "toggle_mode_light": "Mudar para tema claro",
@@ -29,7 +29,7 @@
       "import": "Importar",
       "export": "Exportar"
     },
-    "captions": { 
+    "captions": {
       "edit": "Editar",
       "move_up": "Mover para cima",
       "move_down": "Mover para baixo",
@@ -39,7 +39,7 @@
     }
   },
   "others": {
-    "titles": { 
+    "titles": {
       "drag_drop_url": "Arraste e solte para mudar a ordem da URL",
       "open_collection": "Abrir coleção",
       "import_from_file": "Importar coleções usando um arquivo"
@@ -58,7 +58,11 @@
       "no_tabs": "Não há URLs para abrir. Adicione URLs à essa coleção nas configurações do aplicativo",
       "incorret_type": "Formato do arquivo errado",
       "no_file": "Não é possível importar coleções sem um arquivo",
-      "no_collection_selected": "Não é possível exportar sem selecionar nenhuma coleção"
+      "no_collection_selected": "Não é possível exportar sem selecionar nenhuma coleção",
+      "name_field_mandatory": "O campo \"Nome\" é obrigatório",
+      "add_collection_without_urls": "Você não pode salvar uma coleção sem nenhuma URL",
+      "could_not_save_collection": "Não foi possível salvar a coleção devido aos seguintes errors:",
+      "invalid_url": "URL inválida. Uma URL deveria começar com \"https://\" ou \"http://\""
     },
     "placeholders": {
       "type_url": "Digite a URL aqui",

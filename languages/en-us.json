@@ -7,7 +7,7 @@
     "edit_collection": "Edit collection",
     "add_collection": "Add collection"
   },
-  "buttons": { 
+  "buttons": {
     "titles": {
       "toggle_mode_dark": "Toggle to dark mode",
       "toggle_mode_light": "Toggle to light mode",
@@ -29,7 +29,7 @@
       "import": "Import",
       "export": "Export"
     },
-    "captions": { 
+    "captions": {
       "edit": "Edit",
       "move_up": "Move up",
       "move_down": "Move down",
@@ -39,7 +39,7 @@
     }
   },
   "others": {
-    "titles": { 
+    "titles": {
       "drag_drop_url": "Drag and drop to change URL index",
       "open_collection": "Open collection",
       "import_from_file": "Import collections from file"
@@ -58,7 +58,11 @@
       "no_tabs": "No tabs to open. Add tabs to this collection in the app settings",
       "incorret_type": "Incorrect file format",
       "no_file": "Cannot import collections without a file",
-      "no_collection_selected": "Cannot export without select any collection"
+      "no_collection_selected": "Cannot export without select any collection",
+      "name_field_mandatory": "The field \"Name\" is mandatory",
+      "add_collection_without_urls": "You cannot add a collection without any URLs",
+      "could_not_save_collection": "Could not save the collection due to these erros:",
+      "invalid_url": "Invalid URL. An URL should start with \"https://\" or \"http://\""
     },
     "placeholders": {
       "type_url": "Type URL here",
