@@ -1,34 +1,37 @@
 var import_file = null;
+var locale;
 
-window.onload = () => {
-    getLocation();
+window.onload = async () => {
+    // Get language from storage
+    const result = await chrome.storage.local.get(["language", "collections"]);
+    const selectedLang = result.language || "en-us";
+    const collections = result.collections || [];
+
+    // Get locale from file
+    locale = await fetch(`../languages/${selectedLang}.json`)
+        .then((response) => response.json());
+
+    loadListeners(collections);
+    applyLocation(collections);
+    applyTheme();
     chrome.storage.onChanged.addListener(() => {
-        getLocation();
+        loadListeners(collections);
+        applyLocation(collections);
+        applyTheme();
     });
 }
 
-function getLocation() {
-    chrome.storage.local.get(["language", "theme"]).then(async (result) => {
-        selectedLang = "en-us";
-        if (result.language) {
-            selectedLang = result.language;
-        } else {
-            chrome.storage.local.set({"language": "en-us"});
-        }
-        lang = await fetch(`../languages/${selectedLang}.json`)
-            .then((response) => response.json());
-        getListeners();
-        getCollections();
-    });
-}
+function loadListeners(collections) {
+    // Get page elements
+    const fileInput = document.getElementById("import-file-input");
+    const fileComponent = document.getElementById("import-file-component");
+    const importButton = document.getElementById("import-button");
 
-function getListeners () {
-    fileInput = document.getElementById("import-file-input");
-    fileComponent = document.getElementById("import-file-component");
-    fileComponent.addEventListener("click", (event) => {
+    // Load listeners
+    fileComponent.addEventListener("click", () => {
         fileInput.click();
     });
-    fileInput.addEventListener("change", (event) => {
+    fileInput.addEventListener("change", () => {
         const selectFileCaption = document.getElementById("select-file");
         if (fileInput.files.length > 0) {
             file_uploaded = fileInput.files[0];
@@ -36,105 +39,91 @@ function getListeners () {
                 selectFileCaption.innerHTML = fileInput.files[0].name;
                 fileComponent.style.background = "#A0E85C";
                 fileComponent.style.border = "1px solid #25F400";
-                buttons = document.getElementById("import-buttons");
-                buttons.title = lang.others.titles.import_from_file;
-                buttons.innerHTML = `
-                    <button type="button" class="import-button" id="import-button">${lang.buttons.captions.import}</button>
-                `
                 import_file = fileInput.files[0];
+                importButton.disabled = false;
+                applyLocation(collections);
+                applyTheme();
             } else {
-                alert(lang.others.errors.incorret_type);
-                fileInput.value = '';
-                buttons = document.getElementById("import-buttons");
-                buttons.title = "Cannot import collections without a file"
-                buttons.innerHTML = `
-                    <button type="button" class="import-button-disabled" id="import-button-disabled" disabled>${lang.buttons.captions.import}</button>
-                `
+                alert(locale.others.errors.incorret_type);
             }
         }
-        if (import_file) getActions();
+    });
+
+    importButton.addEventListener("click", () => {
+        console.log("clicou");
+        var reader = new FileReader();
+        reader.onload = (event) => {
+            var newCollections = JSON.parse(event.target.result);
+            for (const collection of newCollections) {
+                const newCollection = {
+                    id: crypto.randomUUID(),
+                    name: collection.name,
+                    urls: collection.urls.map((url) => {
+                        return {
+                            id: crypto.randomUUID(),
+                            string: url.string,
+                        }
+                    }),
+                    color: collection.color,
+                };
+                collections.push(newCollection);
+            }
+            chrome.storage.local.set({ "collections": collections });
+            document.getElementById("import-file-input").value = "";
+            const selectFileCaption = document.getElementById("select-file");
+            selectFileCaption.innerHTML = locale.others.captions.select_file;
+            const fileComponent = document.getElementById("import-file-component");
+            fileComponent.style = null;
+            fileComponent.classList.value = "input-file";
+            import_file = null;
+        };
+        reader.readAsText(import_file);
     });
 }
 
-function getActions () {
-    backButton = document.getElementById("back");
-    backButton.title = lang.buttons.titles.back;
-    button = document.getElementById("import-button");
-    button.innerHTML = lang.buttons.captions.import;
-    if (button) {
-        button.addEventListener("click", (event) => {
-            chrome.storage.local.get(["collections"]).then((result) => {
-                const current_collections = result.collections && result.collections.length > 0 ? result.collections : [];
-                var reader = new FileReader();
-                reader.onload = (event) => {
-                    var collections = JSON.parse(event.target.result);
-                    const newCollections = [...current_collections];
-                    for (let collection of collections) {
-                        var available = false;
-                        newId = 0
-                        while (!available) {
-                            const collec = newCollections.find((c) => c.id.toString() == newId.toString())
-                            if (!collec) {
-                                available = true;
-                            } else {
-                                newId += 1;
-                            }
-                        }
-                        const newUrls = [];
-                        for (let url of collection.urls) {
-                            const newUrl = { 
-                                "id": `${newId}-${collection.urls.indexOf(url)}`, 
-                                "string": url.string.startsWith("http") ? url.string : `https://${url.string}` 
-                            }
-                            newUrls.push(newUrl);
-                        }
-                        const newCollection = { 
-                            "id": newId, 
-                            "name": collection.name, 
-                            "urls": newUrls,
-                            "color": collection.color
-                        };
-                        newCollections.push(newCollection);
-                    }
-                    current_collections.push(...newCollections);
-                    chrome.storage.local.set({ "collections": current_collections });
-                    document.getElementById("import-file-input").value = "";
-                    const selectFileCaption = document.getElementById("select-file");
-                    selectFileCaption.innerHTML = lang.others.captions.select_file;
-                    const fileComponent = document.getElementById("import-file-component");
-                    fileComponent.style = null;
-                    fileComponent.classList.value = "input-file";
-                };
-                reader.readAsText(import_file);
-            });
-        });
+async function applyLocation(collections) {
+    // Get page elements
+    const pageTitle = document.getElementById("page-title");
+    const backButton = document.getElementById("back");
+    const selectFileInput = document.getElementById("select-file");
+    const importButton = document.getElementById("import-button");
+    const element = document.getElementById("collections-size");
+    const fileInput = document.getElementById("import-file-input");
+
+    const shouldDisable = fileInput.files.length === 0;
+
+    // Apply locale on elements
+    pageTitle.innerHTML = locale.titles.import_collections;
+    backButton.title = locale.buttons.titles.back;
+    selectFileInput.innerHTML = locale.others.captions.select_file;
+    importButton.innerHTML = locale.buttons.captions.import;
+    importButton.title = shouldDisable ? locale.others.errors.no_file : locale.others.titles.import_from_file;
+    if (collections && collections.length > 0) {
+        element.innerHTML = `${locale.others.captions.current_collections} ${collections.length}`
+    } else {
+        element.innerHTML += `${locale.others.captions.current_collections} 0`
     }
 }
 
-function getCollections () {
-    chrome.storage.local.get(["collections", "theme"]).then((result) => {
-        pageMain = document.getElementById("import-page");
-        pageMain.classList.value = `full-page-${result.theme}`
-        pageTitle = document.getElementById("page-title");
-        pageTitle.innerHTML = lang.titles.import_collections;
-        container = document.getElementById("container");
-        container.classList.value = `container-${result.theme}`
-        back_icon = document.getElementById("back-icon");
-        backButton = document.getElementById("back");
-        backButton.title = lang.buttons.titles.back;
-        selectFileInput = document.getElementById("select-file");
-        selectFileInput.innerHTML = lang.others.captions.select_file;
-        buttons = document.getElementById("import-buttons");
-        buttons.innerHTML = `<button type="button" class="import-button-disabled" id="import-button-disabled" disabled>${lang.buttons.captions.import}</button>`
-        icons = [back_icon]
-        for (icon of icons) {
-            icon.classList.value = `icon-${result.theme}`
-        }
-        element = document.getElementById("collections-size");
-        if (result.collections && result.collections.length > 0) {
-            element.innerHTML = `${lang.others.captions.current_collections} ${result.collections.length}`
-        } else {
-            element.innerHTML += `${lang.others.captions.current_collections} 0`
-        }
-    });
+async function applyTheme() {
+    // Get theme from storage
+    const result = chrome.storage.local.get(["theme"]);
+    const theme = result.theme || "dark";
+
+    // Get page elements
+    const pageMain = document.getElementById("import-page");
+    const container = document.getElementById("container");
+    const backIcon = document.getElementById("back-icon");
+    const importButton = document.getElementById("import-button");
+    const icons = [backIcon]
+
+    const shouldDisable = import_file ? false : true;
+
+    // Apply theme on elements
+    pageMain.classList.value = `full-page-${theme}`
+    container.classList.value = `container-${theme}`
+    importButton.classList.value = shouldDisable ? `import-button-disabled` : `import-button`;
+    for (const icon of icons) {
+        icon.classList.value = `icon-${theme}`
+    }
 }
