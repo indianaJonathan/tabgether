@@ -36,10 +36,10 @@ function loadListeners(collections) {
         if (fileInput.files.length > 0) {
             file_uploaded = fileInput.files[0];
             if (file_uploaded.type == "application/json") {
-                selectFileCaption.innerHTML = fileInput.files[0].name;
+                selectFileCaption.innerHTML = file_uploaded.name;
                 fileComponent.style.background = "#A0E85C";
                 fileComponent.style.border = "1px solid #25F400";
-                import_file = fileInput.files[0];
+                import_file = file_uploaded;
                 importButton.disabled = false;
                 applyLocation(collections);
                 applyTheme();
@@ -50,7 +50,6 @@ function loadListeners(collections) {
     });
 
     importButton.addEventListener("click", () => {
-        console.log("clicou");
         var reader = new FileReader();
         reader.onload = (event) => {
             var newCollections = JSON.parse(event.target.result);
