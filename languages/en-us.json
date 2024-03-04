@@ -23,16 +23,16 @@
       "edit_collection": "Edit collection",
       "move_collection_up": "Move collection up",
       "move_collection_down": "Move collection down",
-      "move_url_up": "Move URL up",
-      "move_url_down": "Move URL down",
+      "move-up_url": "Move URL up",
+      "move-down_url": "Move URL down",
       "settings": "Settings",
       "import": "Import",
       "export": "Export"
     },
     "captions": {
       "edit": "Edit",
-      "move_up": "Move up",
-      "move_down": "Move down",
+      "move-up": "Move up",
+      "move-down": "Move down",
       "delete": "Delete",
       "import": "Import",
       "export": "Export"

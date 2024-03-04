@@ -23,8 +23,8 @@
       "edit_collection": "Editar coleção",
       "move_collection_up": "Mover coleção para cima",
       "move_collection_down": "Mover coleção para baixo",
-      "move_url_up": "Mover URL para cima",
-      "move_url_down": "Mover URL para baixo",
+      "move-up_url": "Mover URL para cima",
+      "move-down_url": "Mover URL para baixo",
       "settings": "Configurações",
       "import": "Importar",
       "export": "Exportar"
