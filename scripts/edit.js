@@ -1,15 +1,15 @@
-var urls = []
+const urls = [];
 var locale;
 
 window.onload = async () => {
   // Get language from storage
-  const result = await chrome.storage.local.get(["language"]);
+  const result = await chrome.storage.local.get(["language", "collections"]);
   const selectedLang = result.language || "en-us";
   // Get locale from file
   locale = await fetch(`../languages/${selectedLang}.json`)
     .then((response) => response.json());
 
-  loadData();
+  await loadData();
   loadListeners();
   applyLocation();
   applyTheme();
@@ -35,8 +35,9 @@ function applyLocation() {
 
 async function applyTheme() {
   // Get theme from storage
-  const result = await chrome.storage.local.get(["theme"]);
+  const result = await chrome.storage.local.get(["theme", "collections"]);
   const theme = result.theme || "dark";
+  const collections = result.collections || [];
 
   // Get page elements
   const pageMain = document.getElementById("edit-page");
@@ -58,24 +59,40 @@ async function applyTheme() {
   urlsArea.classList.add(`border-${theme}`);
   newUrlInput.classList.add(`input-${theme}`);
   save_icon.classList.add(`icon-dark`);
+
+  // Apply theme on collections
+  for (const collection of collections) {
+    for (const url of collection.urls) {
+      const menu = document.getElementById(`url-op-${url.id}`);
+      const urlEditInput = document.getElementById(`url-edit-input-${url.id}`);
+      const optionsButton = document.getElementById(`options-button-${url.id}`);
+
+      if (menu) menu.classList.add(`float-menu-${theme}`);
+      if (urlEditInput) urlEditInput.classList.value = `input-${theme}`;
+      if (optionsButton) optionsButton.classList.value = `icon-${theme}`;
+    }
+  }
 }
 
 async function loadData() {
-  chrome.storage.local.get(["collections"]).then((result) => {
-    const collectionId = window.location.search.split("=")[1];
-    const col = result.collections.find((col) => col.id == collectionId);
-    if (col) {
-      const collectionColorInput = document.getElementById("collection-color-input");
-      const collectionNameInput = document.getElementById("collection-name-input");
+  const result = await chrome.storage.local.get(["collections"]);
+  const collections = result.collections || [];
+  const collectionId = window.location.search.split("=")[1];
+  const collection = collections.filter((col) => col.id === collectionId)[0];
 
-      collectionColorInput.value = col.color;
-      collectionNameInput.value = col.name;
-      urls = col.urls;
-      loadUrls();
-    } else {
-      navigation.back();
-    }
-  });
+  if (collection && collectionId) {
+    const collectionColorInput = document.getElementById("collection-color-input");
+    const collectionNameInput = document.getElementById("collection-name-input");
+
+    collectionColorInput.value = collection.color;
+    collectionNameInput.value = collection.name;
+
+    urls.push(...collection.urls);
+    loadUrls();
+  } else {
+    alert("(404) Collection not found");
+    navigation.back();
+  }
 }
 
 function loadListeners() {
@@ -114,7 +131,9 @@ function loadListeners() {
         const cols = currentCollections.collections || [];
         const collectionId = window.location.search.split("=")[1];
         const index = cols.findIndex((col) => col.id == collectionId);
+        const currentCollection = { ...cols[index] };
         const collection = {
+          ...currentCollection,
           name: nameInput.value,
           color: colorInput.value,
           urls: cols[index].urls.map((url) => {
@@ -126,7 +145,7 @@ function loadListeners() {
           }),
         }
 
-        cols[index] = collection;
+        cols.splice(index, 1, collection);
         chrome.storage.local.set({ "collections": cols });
         navigation.back();
       }
@@ -141,14 +160,10 @@ function validateUrl(url) {
 }
 
 function loadUrls() {
-  let theme = "dark";
-  chrome.storage.local.get(["theme"]).then((result) => {
-    theme = result.theme;
-  });
   const urlsArea = document.getElementById("included-urls");
 
   urlsArea.innerHTML = urls.map((url, index) => {
-    return UrlComponent(url, theme, index === 0, index === urls.length - 1);
+    return UrlComponent(url, index === 0, index === urls.length - 1);
   }).join("");
 
   for (const url of urls) {
@@ -175,24 +190,24 @@ function loadUrls() {
     });
     const optionsButton = document.getElementById(`options-url-${url.id}`);
     optionsButton.addEventListener("click", () => {
-      menu = document.getElementById(`url-op-${url.id}`);
+      const menu = document.getElementById(`url-op-${url.id}`);
       if (menu.classList.value.includes("float-menu-hide")) {
         menu.classList.remove("float-menu-hide");
-        menu.classList.add(`float-menu-${theme}`);
+        menu.classList.add(`float-menu`);
       } else {
-        menu.classList.remove(`float-menu-${theme}`);
+        menu.classList.remove(`float-menu`);
         menu.classList.add("float-menu-hide");
       }
     });
     document.addEventListener("click", (event) => {
-      menu = document.getElementById(`url-op-${url.id}`);
+      const menu = document.getElementById(`url-op-${url.id}`);
       if (menu) {
         if (event.target.id != `url-op-${url.id}` && event.target.parentElement.id != `options-url-${url.id}` && event.target.parentElement.id != `url-op-${url.id}`) {
-          menu.classList.remove(`float-menu-${theme}`);
+          menu.classList.remove("float-menu");
           menu.classList.add("float-menu-hide");
         }
       }
-    });
+    })
   }
 }
 
@@ -221,6 +236,7 @@ function moveUrl(direction, url) {
     urls[index] = nextUrl;
   }
   loadUrls();
+  applyTheme();
 }
 
 function maxString(value, type) {
@@ -244,7 +260,7 @@ function MenuOptionComponent(value, title, id) {
   `
 }
 
-function UrlComponent(url, theme, isFirst, isLast) {
+function UrlComponent(url, isFirst, isLast) {
   const options = ["edit", "delete"];
   if (!isFirst) options.push("move-up");
   if (!isLast) options.push("move-down");
@@ -254,10 +270,10 @@ function UrlComponent(url, theme, isFirst, isLast) {
       <span style="display: block; padding: .3rem 2rem .3rem .3rem; font-size: 1.3rem;" id="url-display-${url.id}">
         ${maxString(url.string, "url")}
       </span>
-      <input style="display: none;" id="url-edit-input-${url.id}" type="text" value="${url.string}" class="input-${theme}"/>
+      <input style="display: none;" id="url-edit-input-${url.id}" type="text" value="${url.string}" />
       <div class="url-buttons">
         <button class="icon-button" type="button" id="options-url-${url.id}" title="${locale.buttons.titles.url_options}">
-          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 128 512" class="icon-${theme}"><path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 128 512" id="options-button-${url.id}"><path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z"/></svg>
         </button>
         <div class="float-menu-hide" id="url-op-${url.id}">
         ${options.map((option) => {

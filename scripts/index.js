@@ -28,12 +28,14 @@ function applyLocation(collections) {
     const settingsButton = document.getElementById("settings-button");
     const importButton = document.getElementById("import-button");
     const exportButton = document.getElementById("export-button");
+    const noCollections = document.getElementById("no-collections");
 
     // Apply locale to elements
     pageTitle.innerHTML = locale.titles.your_collections;
     settingsButton.title = locale.buttons.titles.settings;
     importButton.title = locale.buttons.titles.import;
     exportButton.title = locale.buttons.titles.export;
+    if (noCollections) noCollections.innerHTML = locale.others.span.no_collections_found;
 
     // Apply locale to collections components
     for (const collection of collections) {
@@ -83,6 +85,8 @@ async function loadData() {
         container.innerHTML = collections.map((collection) => {
             return CollectionComponent(collection);
         }).join("");
+    } else {
+        container.innerHTML = `<span id="no-collections"></span>`
     }
 }
 
