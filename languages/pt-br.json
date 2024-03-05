@@ -21,8 +21,8 @@
       "edit_url": "Editar URL",
       "delete_collection": "Excluir coleção",
       "edit_collection": "Editar coleção",
-      "move_collection_up": "Mover coleção para cima",
-      "move_collection_down": "Mover coleção para baixo",
+      "move-up_collection": "Mover coleção para cima",
+      "move-down_collection": "Mover coleção para baixo",
       "move-up_url": "Mover URL para cima",
       "move-down_url": "Mover URL para baixo",
       "settings": "Configurações",
@@ -31,8 +31,8 @@
     },
     "captions": {
       "edit": "Editar",
-      "move_up": "Mover para cima",
-      "move_down": "Mover para baixo",
+      "move-up": "Mover para cima",
+      "move-down": "Mover para baixo",
       "delete": "Excluir",
       "import": "Importar",
       "export": "Exportar"

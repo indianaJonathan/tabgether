@@ -151,21 +151,21 @@ function loadUrls() {
     return UrlComponent(url, theme, index === 0, index === urls.length - 1);
   }).join("");
 
-  for (let url of urls) {
+  for (const url of urls) {
     const moveUpButton = document.getElementById(`url-move-up-${url.id}`);
     const moveDownButton = document.getElementById(`url-move-down-${url.id}`);
-    const delete_button = document.getElementById(`url-delete-${url.id}`);
-    const edit_button = document.getElementById(`url-edit-${url.id}`);
+    const deleteButton = document.getElementById(`url-delete-${url.id}`);
+    const editButton = document.getElementById(`url-edit-${url.id}`);
     const label = document.getElementById(`url-display-${url.id}`);
     const input = document.getElementById(`url-edit-input-${url.id}`);
 
-    delete_button.addEventListener("click", () => {
+    deleteButton.addEventListener("click", () => {
       removeUrl(url);
     });
-    edit_button.addEventListener("click", () => {
+    editButton.addEventListener("click", () => {
       label.style.display = "none";
       input.style.display = "block";
-      edit_button.style.display = "none";
+      editButton.style.display = "none";
     });
     if (moveUpButton) moveUpButton.addEventListener("click", () => {
       moveUrl("up", url);
